@@ -86,4 +86,3 @@ This project is licensed under the [MIT License](LICENSE).
 ## Authors
 
 - Marcin Potoczny
-```
