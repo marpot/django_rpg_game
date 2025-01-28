@@ -87,18 +87,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 - Marcin Potoczny
 ```
-
-### Steps to Add the `README.md` File:
-
-1. Go to your project’s root directory.
-2. Create a `README.md` file:
-   ```bash
-   touch README.md
-   ```
-3. Paste the updated content into the `README.md` file.
-4. Add the file to git and push it to your repository:
-   ```bash
-   git add README.md
-   git commit -m "Update README.md (remove AI Master)"
-   git push origin main
-   ```
