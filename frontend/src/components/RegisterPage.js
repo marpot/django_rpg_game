@@ -91,7 +91,7 @@ const RegisterPage = () => {
             </div>
 
           	<div className="field has-text-centered">
-            	<p>Masz już konto? <Link to="/login">Zaloguj się</Link>></p>
+            	<p>Masz już konto? <Link to="/">Zaloguj się</Link>></p>
           	</div>
           </form>
         </div>
