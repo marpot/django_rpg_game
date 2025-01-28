@@ -85,7 +85,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Authors
 
-- Your Name
+- Marcin Potoczny
 ```
 
 ### Steps to Add the `README.md` File:
