@@ -1,188 +1,267 @@
-Jasne, poniżej przedstawiam te same notatki, ale z przykładami kodu, które masz w swojej aplikacji. Będziesz mógł zobaczyć jak poszczególne części wyglądają w kodzie.
+
+---
+```markdown
+# Notatki
+
+## Podstawy Django REST Framework (DRF)
+
+1. **Django REST Framework** to narzędzie do budowania API w Django, które pozwala łatwo tworzyć, edytować i zarządzać interfejsami RESTful.
+
+### Serializery (Serializers)
+
+- **Czym są serializery?**
+  Serializery w DRF są odpowiedzialne za konwersję danych między formatem Pythonowym (np. modelami Django) a formatem, który może być przesyłany przez API (np. JSON).
+
+- **Rodzaje serializerów**:
+  - **`ModelSerializer`**: Używamy go, gdy chcemy łatwo serializować dane z modelu Django.
+  - **`Serializer`**: Ogólny serializer, który można stosować do innych przypadków.
+
+### Tworzenie własnych serializerów
+
+#### Rejestracja użytkownika (UserRegisterSerializer)
+
+```python
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+```
+
+#### Logowanie użytkownika (LoginSerializer)
+
+```python
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        username = attrs.get('username')
+        password = attrs.get('password')
+
+        user = User.objects.filter(username=username).first()
+
+        if not user or not user.check_password(password):
+            raise serializers.ValidationError("Invalid credentials")
+
+        refresh = RefreshToken.for_user(user)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+```
+
+### Uwierzytelnianie za pomocą JWT
+
+- **JWT (JSON Web Tokens)** to popularny sposób uwierzytelniania użytkowników w API.
+- **Refresh Token**: Służy do odświeżania tokenów.
+- **Access Token**: Krótkoterminowy token, który zapewnia dostęp do chronionych zasobów API.
+
+#### Generowanie tokenów
+
+```python
+refresh = RefreshToken.for_user(user)
+return {
+    'refresh': str(refresh),
+    'access': str(refresh.access_token),
+}
+```
+
+### Błędy walidacji
+
+- **`serializers.ValidationError`**: Używamy tej klasy do zgłaszania błędów walidacji.
+
+```python
+if not user or not user.check_password(password):
+    raise serializers.ValidationError("Invalid credentials")
+```
 
 ---
 
-### **Podstawy Django REST Framework (DRF)**
+## Jak działają serializery w Django REST Framework?
 
-1. **Django REST Framework** to narzędzie do budowania API w Django, które pozwala łatwo tworzyć, edytować i zarządzać interfejsami RESTful. 
+### Zadanie serializera
 
-2. **Serializery (Serializers)**:
-   - **Czym są serializery?**: Serializery w DRF są odpowiedzialne za konwersję danych między formatem Pythonowym (np. modelami Django) a formatem, który może być przesyłany przez API (np. JSON).
-   - **Rodzaje serializerów**:
-     - **`ModelSerializer`**: Używa się go, gdy chcemy łatwo serializować dane z modelu Django. Automatycznie generuje pola i logikę walidacji na podstawie modelu.
-     - **`Serializer`**: Ogólny serializer, który można stosować do innych przypadków, gdzie nie korzystamy bezpośrednio z modelu Django.
+Serializery są odpowiedzialne za konwersję danych pomiędzy formatami (np. model Pythonowy → JSON).
 
-3. **Tworzenie własnych serializerów**:
-   - **Rejestracja użytkownika (UserRegisterSerializer)**:
-     - Używamy **`ModelSerializer`** do serializacji danych użytkownika (username, email, password).
-     - **write_only=True** w przypadku pola hasła oznacza, że dane to będą tylko zapisywane, ale nie zwracane w odpowiedzi API.
-     - Nadpisanie metody `create()` pozwala na tworzenie użytkownika z wykorzystaniem metody **`create_user`**, która automatycznie haszuje hasło.
+### Metoda `validate()`
 
-   **Przykład kodu:**
-   ```python
-   class UserRegisterSerializer(serializers.ModelSerializer):
-       password = serializers.CharField(write_only=True)
+- Służy do dodatkowej walidacji danych.
+- Zgłasza wyjątek `ValidationError` w przypadku niepoprawnych danych.
 
-       class Meta:
-           model = User
-           fields = ['username', 'email', 'password']
+```python
+def validate(self, attrs):
+    username = attrs.get('username')
+    password = attrs.get('password')
 
-       def create(self, validated_data):
-           user = User.objects.create_user(**validated_data)
-           return user
-   ```
+    user = User.objects.filter(username=username).first()
 
-   - **Logowanie użytkownika (LoginSerializer)**:
-     - Używamy **`Serializer`** do serializacji danych wejściowych (username, password).
-     - W metodzie **`validate`** sprawdzamy poprawność loginu i hasła:
-       - Pobieramy użytkownika na podstawie nazwy użytkownika.
-       - Sprawdzamy, czy hasło jest poprawne (przy pomocy `check_password`).
-     - Jeśli dane są poprawne, tworzymy tokeny JWT (JSON Web Tokens), które pozwalają na uwierzytelnienie w API.
+    if not user or not user.check_password(password):
+        raise serializers.ValidationError("Invalid credentials")
+```
 
-   **Przykład kodu:**
-   ```python
-   class LoginSerializer(serializers.Serializer):
-       username = serializers.CharField()
-       password = serializers.CharField()
+### Metoda `create()`
 
-       def validate(self, attrs):
-           username = attrs.get('username')
-           password = attrs.get('password')
+- Używamy jej do dostosowania sposobu tworzenia obiektów w bazie danych.
 
-           user = User.objects.filter(username=username).first()
-
-           if not user or not user.check_password(password):
-               raise serializers.ValidationError("Invalid credentials")
-
-           refresh = RefreshToken.for_user(user)
-           return {
-               'refresh': str(refresh),
-               'access': str(refresh.access_token),
-           }
-   ```
-
-4. **Uwierzytelnianie za pomocą JWT**:
-   - **JWT** to popularny sposób uwierzytelniania użytkowników w API.
-   - **Refresh Token**: Używany do odświeżania tokenów, co umożliwia utrzymanie sesji użytkownika bez konieczności ciągłego logowania.
-   - **Access Token**: Krótkoterminowy token, który zapewnia dostęp do chronionych zasobów API.
-
-   **Biblioteka `rest_framework_simplejwt`**:
-   - Używamy jej do generowania i walidacji tokenów JWT.
-   - **`RefreshToken.for_user(user)`**: Tworzy token odświeżania dla danego użytkownika.
-   - W metodzie logowania zwracamy oba tokeny: refresh i access.
-
-   **Przykład kodu (generowanie tokenów):**
-   ```python
-   refresh = RefreshToken.for_user(user)
-   return {
-       'refresh': str(refresh),
-       'access': str(refresh.access_token),
-   }
-   ```
-
-5. **Błędy walidacji**:
-   - **`serializers.ValidationError`**: Służy do zgłaszania błędów walidacji w przypadku niepoprawnych danych (np. błędne dane logowania).
-
-   **Przykład kodu (błąd walidacji):**
-   ```python
-   if not user or not user.check_password(password):
-       raise serializers.ValidationError("Invalid credentials")
-   ```
+```python
+def create(self, validated_data):
+    user = User.objects.create_user(**validated_data)
+    return user
+```
 
 ---
 
-### **Jak działają serializery w Django REST Framework?**
+## Kroki, które wykonaliśmy
 
-1. **Zadanie serializera**: Serializery są odpowiedzialne za konwersję danych pomiędzy formatami (np. model Pythonowy → JSON).
-   
-2. **Metoda `validate()`**:
-   - Jest to specjalna metoda w serializerze, która umożliwia wykonanie dodatkowej logiki walidacji.
-   - W przypadku logowania użytkownika walidujemy poprawność nazwy użytkownika i hasła.
-   - Zgłaszamy wyjątek `ValidationError`, jeśli dane wejściowe są niepoprawne.
-
-   **Przykład kodu:**
-   ```python
-   def validate(self, attrs):
-       username = attrs.get('username')
-       password = attrs.get('password')
-
-       user = User.objects.filter(username=username).first()
-
-       if not user or not user.check_password(password):
-           raise serializers.ValidationError("Invalid credentials")
-   ```
-
-3. **Metoda `create()`**:
-   - Jeśli używamy **`ModelSerializer`**, możemy nadpisać metodę `create()`, aby dostosować sposób tworzenia obiektów w bazie danych (np. haszowanie hasła podczas tworzenia użytkownika).
-   
-   **Przykład kodu:**
-   ```python
-   def create(self, validated_data):
-       user = User.objects.create_user(**validated_data)
-       return user
-   ```
-
-4. **Serializowanie danych użytkownika**:
-   - Tworzymy serializer dla rejestracji użytkownika, który zajmuje się konwersją danych z formularza na obiekt użytkownika.
-   - Z kolei w przypadku logowania serializujemy dane wejściowe, walidujemy je, a następnie generujemy tokeny JWT, które są zwracane w odpowiedzi.
-
-   **Przykład kodu (serializowanie i walidacja danych):**
-   ```python
-   class UserRegisterSerializer(serializers.ModelSerializer):
-       password = serializers.CharField(write_only=True)
-
-       class Meta:
-           model = User
-           fields = ['username', 'email', 'password']
-
-       def create(self, validated_data):
-           user = User.objects.create_user(**validated_data)
-           return user
-   ```
-
-   ```python
-   class LoginSerializer(serializers.Serializer):
-       username = serializers.CharField()
-       password = serializers.CharField()
-
-       def validate(self, attrs):
-           username = attrs.get('username')
-           password = attrs.get('password')
-
-           user = User.objects.filter(username=username).first()
-
-           if not user or not user.check_password(password):
-               raise serializers.ValidationError("Invalid credentials")
-
-           refresh = RefreshToken.for_user(user)
-           return {
-               'refresh': str(refresh),
-               'access': str(refresh.access_token),
-           }
-   ```
+1. **Utworzenie aplikacji Django i włączenie DRF**.
+2. **Utworzenie modeli i serializerów dla użytkowników**.
+3. **Generowanie tokenów JWT**.
 
 ---
 
-### **Kroki, które wykonaliśmy**
-
-1. **Utworzenie aplikacji Django i włączenie DRF**:
-   - Zainstalowaliśmy Django REST Framework oraz rest_framework_simplejwt.
-   - Skonfigurowaliśmy nasze aplikacje w `INSTALLED_APPS`.
-
-2. **Utworzenie modeli i serializerów dla użytkowników**:
-   - Stworzyliśmy **`UserRegisterSerializer`** i **`LoginSerializer`**, które obsługują rejestrację i logowanie użytkowników.
-
-3. **Generowanie tokenów JWT**:
-   - Po walidacji danych użytkownika generujemy tokeny JWT (access token i refresh token) dla bezpiecznego uwierzytelniania użytkowników w naszym API.
-
----
-
-### **Wskazówki i rzeczy do zapamiętania**
+## Wskazówki i rzeczy do zapamiętania
 
 - **Serializery** w DRF to potężne narzędzie do konwersji danych, walidacji i tworzenia obiektów w bazie danych.
-- **`ModelSerializer`**: Zawsze używaj, gdy chcesz połączyć dane z modelem Django, to upraszcza kod.
-- **Tokeny JWT**: Bardzo przydatne do zarządzania sesjami użytkowników w API, zwłaszcza w aplikacjach, które muszą działać bez konieczności przechowywania sesji na serwerze.
+- **`ModelSerializer`**: Używaj go, gdy chcesz połączyć dane z modelem Django.
+- **Tokeny JWT**: Przydatne do zarządzania sesjami użytkowników w API.
 
 ---
 
-Teraz masz pełne notatki z kodem, które będziesz mógł wykorzystać w przyszłości. Jeśli masz jakiekolwiek pytania, śmiało pytaj!
+## React - Funkcja strzałkowa vs. Zwykła funkcja
+
+### Funkcja strzałkowa (Arrow Function)
+
+```jsx
+const Room = () => {
+  return (
+    <div>
+      <h1>Welcome to the Game Room</h1>
+    </div>
+  );
+};
+```
+
+- **Zalety**:
+  - Krótsza składnia.
+  - Nie tworzy własnego `this`.
+  - Częściej stosowana w nowoczesnym React.
+  
+- **Wady**:
+  - Trudniejsza do zrozumienia dla początkujących.
+
+### Zwykła funkcja (Function Declaration)
+
+```jsx
+function Room() {
+  return (
+    <div>
+      <h1>Welcome to the Game Room</h1>
+    </div>
+  );
+}
+```
+
+- **Zalety**:
+  - Łatwiejsza dla początkujących.
+  - Możliwość użycia `this`.
+
+- **Wady**:
+  - Tworzy własny `this`.
+  - Dłuższa składnia.
+
+---
+
+## Notatki z budowy aplikacji RPG w React
+
+### Co to jest React?
+
+React to biblioteka JavaScript do budowania interfejsów użytkownika, stworzona przez Facebook. Dzięki komponentom, React umożliwia tworzenie złożonych aplikacji w sposób modularny.
+
+### Stan (State) w React
+
+- **`useState`**: Funkcja do tworzenia stanu w komponencie funkcyjnym.
+
+```jsx
+const [username, setUsername] = useState('');
+```
+
+### Routing w React z react-router-dom
+
+Instalacja:
+
+```bash
+npm install react-router-dom
+```
+
+Przykład:
+
+```jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+### Komunikacja z API
+
+Instalacja Axios:
+
+```bash
+npm install axios
+```
+
+Przykład:
+
+```jsx
+import axios from 'axios';
+
+const handleLogin = async () => {
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', {
+      username: 'user',
+      password: 'password'
+    });
+    localStorage.setItem('access', response.data.access);
+  } catch (error) {
+    console.error('Błąd logowania', error);
+  }
+};
+```
+
+### Podstawowe błędy w React
+
+- Błąd w zwracaniu JSX: Używaj `return (...)`, nie `return { ... }`.
+- Upewnij się, że komponenty są poprawnie zaimportowane i używane.
+- Pamiętaj o używaniu funkcji do zmiany stanu (`useState` lub `setState`).
+
+---
+
+## Podsumowanie
+
+- **React** to framework umożliwiający budowanie aplikacji webowych w sposób komponentowy i deklaratywny.
+- **Stan (state)** pozwala przechowywać i aktualizować dane.
+- **Routing** w React realizujemy za pomocą `react-router-dom`.
+- Komponenty są kluczowe dla modularności i utrzymywalności aplikacji w React.
+
+---
+
+Mam nadzieję, że te notatki będą dla Ciebie pomocne! Jeśli masz jakieś pytania lub potrzebujesz dodatkowych wyjaśnień, śmiało pytaj. 😊
+```
