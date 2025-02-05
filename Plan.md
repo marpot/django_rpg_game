@@ -46,7 +46,7 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
 
 4. **Komunikacja w czasie rzeczywistym**:
    - WebSockets (Django Channels):
-     - Obsługa wymiany danych w czasie rzeczywistym między graczami i systemem.
+     - Obsługa wymiany danych w czasie rzeczywistym między graczami i systemem. - *(Aktualnie działa między graczami w poczekalni.)*
      - Synchronizacja działań graczy.
 
 ---

@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import RoomPage from './pages/RoomPage';
 
 function App() {
   return (
@@ -22,14 +23,20 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Dashboard with Sidebar and Roomlist */}
-        <Route 
-          path="/dashboard" 
-          element={
+        <Route path="/dashboard" element={
             <MainLayout>
               <Dashboard />
             </MainLayout>
           } 
         />
+
+        {/* Room */}
+        <Route 
+          path="/room/:roomId"
+          element={<RoomPage /> 
+        } 
+         />
+          
 
         {/* Profile Page */}
         <Route 

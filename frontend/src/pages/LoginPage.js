@@ -12,9 +12,9 @@ const LoginPage = () => {
 
   // Funkcja do obsługi wysyłania formularza
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Zapobiega domyślnej akcji wysyłania formularza
-    console.log('Username:', username); // Logujemy dane użytkownika
-    console.log('Password:', password); // Logujemy dane hasła
+    e.preventDefault(); 
+    console.log('Username:', username); 
+    console.log('Password:', password); 
     setErrorMessage('');
 
     try {
@@ -23,16 +23,20 @@ const LoginPage = () => {
         password: password,
       });
 
-      localStorage.setItem('access', response.data.access);
-      localStorage.setItem('refresh', response.data.refresh);
+      console.log('🔍Odpowiedź z backendu:', response.data);
 
-      console.log('Zalogowano pomyślnie');
-      //przekierowanie do dashboardu po zalogowaniu
-      
-      navigate('/dashboard');
+      if (response.data.access && response.data.refresh) {
+        localStorage.setItem('access', response.data.access);
+        localStorage.setItem('refresh', response.data.refresh);
+        localStorage.setItem('username', username);
+        console.log('✅ Zalogowano pomyślnie');
+        navigate('/dashboard');
+      } else {
+        throw new Error('Brak tokenów w odpowiedzi!');
+      }
     } catch (error) {
-      setErrorMessage('Niepoprawna nazwa użytkownika lub hasło');
-      console.error('Błąd logowania:', error);
+      console.error('❌ Błąd logowania:', error.response ? error.response.data : error.message);
+      setErrorMessage(error.response?.data?.detail || 'Niepoprawna nazwa użytkownika lub hasło');
     }
   };
 
