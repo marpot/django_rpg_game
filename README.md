@@ -52,7 +52,7 @@ python manage.py migrate
 3. Run the backend server:
 
 ```bash
-python manage.py runserver
+daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application
 ```
 
 ### Frontend (React)
