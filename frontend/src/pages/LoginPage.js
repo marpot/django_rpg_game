@@ -43,8 +43,18 @@ const LoginPage = () => {
   return (
     <div>
       <section className="section"> 
+        <div className="logo-container" style={{ maxWidth: '250px', width: '100%', margin: '0 auto' }}>
+          <img src="/images/logo_eldoria.png" alt="Logo" style= {
+            {
+              maxWidth: '100%', 
+              height: 'auto', 
+              objectFit: 'contain', 
+              marginBottom: '20px'
+            }
+          } />
+        </div>
         <div className="container"> 
-          <h1 className="title has-text-centered">Logowanie</h1>
+          
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           <form onSubmit={handleSubmit}>
             {/* Pole użytkownika */}
