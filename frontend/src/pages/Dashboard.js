@@ -25,7 +25,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       
-      <h1 className="title">Komnata Przygód</h1>
+      <h1 className="title">Labirynt Przygód</h1>
 
         {/* Lista pokoi */}
       <div className="rooms-section">
