@@ -1,15 +1,19 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import Chat from '../components/Chat/ChatRoom';
 import './css/RoomPage.css'
 
-const RoomPage = () => {
-  const { roomId } = useParams();
-  const navigate = useNavigate();
+interface RoomPageProps{
+  roomId: string;
+}
+
+const RoomPage: React.FC<RoomPageProps> = () => {
+  const params = useParams();
+  const roomId = params.roomId;
+  const navigate: NavigateFunction = useNavigate();
 
   return (
     <div className="room-page columns is-gapless is-fullheight">
-      
       {/* Lewy Panel - Lista Graczy */}
       <aside className="column is-3 p-4 has-background-grey-dark">
         <h2 className="title is-4 has-text-white">🧙‍♂️ Postacie</h2>
@@ -33,7 +37,7 @@ const RoomPage = () => {
       <aside className="column is-3 p-4 has-background-grey-dark is-fullheight">
         <h2 className="title is-4 has-text-white">💬 Czat</h2>
         <div className="chat-container">
-          <Chat roomId={roomId} />
+          {roomId && <Chat roomId={roomId} />}
         </div>
       </aside>
     

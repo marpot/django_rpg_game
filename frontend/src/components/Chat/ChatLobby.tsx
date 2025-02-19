@@ -1,15 +1,20 @@
-// components/Chat/ChatRoom.js
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/Chat.css';
 
-const ChatRoom = ({ roomId }) => {
-  const [chatMessages, setChatMessages] = useState([{ id: 1, text: "Rozpocznij czat!", user: "System" }]);
+interface ChatMessage {
+  id: number;
+  text: string;
+  user: string;
+}
+
+const ChatLobby: React.FC = () => {
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([{ id: 1, text: "Rozpocznij czat!", user: "System" }]);
   const [messageInput, setMessageInput] = useState("");
-  const messagesEndRef = useRef(null);
-  const socket = useRef(null);
-  const usernameRef = useRef(localStorage.getItem('username') || 'Anonim');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const socket = useRef<WebSocket | null>(null);
+  const usernameRef = useRef<string>(localStorage.getItem('username') || 'Anonim');
   const accessToken = localStorage.getItem('access');
-  const [isTokenValid, setIsTokenValid] = useState(null);
+  const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
 
   useEffect(() => {
     setIsTokenValid(!!accessToken);
@@ -25,11 +30,11 @@ const ChatRoom = ({ roomId }) => {
       return;
     }
 
-    const wsUrl = `ws://localhost:8000/ws/chat/${roomId}/?token=${accessToken}`;
+    const wsUrl = `ws://localhost:8000/ws/chat/lobby/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => {
-      console.log("✅ WebSocket połączony z pokojem:", roomId);
+      console.log("✅ WebSocket połączony z lobby");
     };
 
     socket.current.onerror = (error) => {
@@ -69,7 +74,7 @@ const ChatRoom = ({ roomId }) => {
     }
   }, [isTokenValid]);
 
-  const sendMessage = (e) => {
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!socket.current || socket.current.readyState !== WebSocket.OPEN) {
@@ -120,4 +125,4 @@ const ChatRoom = ({ roomId }) => {
   );
 };
 
-export default ChatRoom;
+export default ChatLobby;

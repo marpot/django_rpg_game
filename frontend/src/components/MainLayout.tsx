@@ -1,8 +1,11 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 
+interface Props {
+  children: React.ReactNode;
+}
 
-const MainLayout = ({ children }) => {
+const MainLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="columns">
       <div className="column is-one-fifth">

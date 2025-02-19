@@ -1,6 +1,16 @@
 import React from 'react';
 
-const RoomList = ({ rooms, onRoomClick }) => {
+type Room = {
+  id: string;
+  name: string;
+};
+
+type RoomListProps = {
+  rooms: Room[];
+  onRoomClick: (roomId: string) => void;
+}
+
+const RoomList: React.FC<RoomListProps> = ({ rooms, onRoomClick }) => {
   return (
     <div className="container">
       <div className="columns is-multiline">

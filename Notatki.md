@@ -262,6 +262,4 @@ const handleLogin = async () => {
 - Komponenty są kluczowe dla modularności i utrzymywalności aplikacji w React.
 
 ---
-
-Mam nadzieję, że te notatki będą dla Ciebie pomocne! Jeśli masz jakieś pytania lub potrzebujesz dodatkowych wyjaśnień, śmiało pytaj. 😊
 ```

@@ -1,8 +1,15 @@
 import React, { useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 
-const ChatMessages = ({ chatMessages }) => {
-  const messagesEndRef = useRef(null);
+interface ChatMessageProps {
+  id: number;
+  text: string;
+  user: string;
+}
+
+
+const ChatMessages: React.FC<{chatMessages: ChatMessageProps[];}> = ({ chatMessages }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

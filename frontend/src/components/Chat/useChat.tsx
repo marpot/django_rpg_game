@@ -1,11 +1,21 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const useChat = (roomId) => {
-  const [chatMessages, setChatMessages] = useState([{ id: 1, text: "Rozpocznij czat!", user: "System" }]);
-  const [username, setUsername] = useState(localStorage.getItem("username") || "Anonim");
-  const [isTokenValid, setIsTokenValid] = useState(null);
-  const socket = useRef(null);
-  const receivedMessages = useRef(new Set());
+// Definicja typu dla wiadomości
+interface ChatMessage {
+  id: number;
+  text: string;
+  user: string;
+}
+
+// Definicja typu dla hooka useChat
+const useChat = (roomId: string) => {
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    { id: 1, text: "Rozpocznij czat!", user: "System" },
+  ]);
+  const [username, setUsername] = useState<string>(localStorage.getItem("username") || "Anonim");
+  const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
+  const socket = useRef<WebSocket | null>(null);
+  const receivedMessages = useRef<Set<number>>(new Set());
   const accessToken = localStorage.getItem("access");
 
   useEffect(() => {
@@ -33,13 +43,16 @@ const useChat = (roomId) => {
     };
   }, [accessToken, roomId]);
 
-  const handleWebSocketMessage = (e) => {
+  const handleWebSocketMessage = (e: MessageEvent) => {
     const data = JSON.parse(e.data);
     if (receivedMessages.current.has(data.message_id)) return;
     receivedMessages.current.add(data.message_id);
 
     const sender = data.sender || "Nieznajomy";
-    setChatMessages((prev) => [...prev, { id: prev.length + 1, text: data.message, user: sender }]);
+    setChatMessages((prev) => [
+      ...prev,
+      { id: prev.length + 1, text: data.message, user: sender },
+    ]);
   };
 
   useEffect(() => {
@@ -47,7 +60,7 @@ const useChat = (roomId) => {
     return () => socket.current?.close();
   }, [isTokenValid, connectWebSocket]);
 
-  const sendMessage = (message) => {
+  const sendMessage = (message: string) => {
     if (!socket.current || socket.current.readyState !== WebSocket.OPEN) return;
     socket.current.send(JSON.stringify({ message, sender: username }));
   };

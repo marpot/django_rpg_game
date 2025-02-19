@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-const ChatInput = ({ sendMessage }) => {
-  const [messageInput, setMessageInput] = useState("");
+interface ChatInputProps {
+  sendMessage: (message: string) => void;
+}
 
-  const handleSubmit = (e) => {
+const ChatInput: React.FC<ChatInputProps> = ({ sendMessage }) => {
+  const [messageInput, setMessageInput] = useState('');
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!messageInput.trim()) return;
     sendMessage(messageInput);
-    setMessageInput("");
+    setMessageInput('');
   };
 
   return (

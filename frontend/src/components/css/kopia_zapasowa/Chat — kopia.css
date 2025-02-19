@@ -1,0 +1,135 @@
+/* Kontener czatu z efektem szkła */
+.box-chat-container {
+  max-width: 2000px;
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.2); /* Przezroczystość tła */
+  backdrop-filter: blur(10px); /* Rozmycie tła (efekt szkła) */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Lekki cień */
+  height: 70vh; /* Zmieniamy wysokość na 70% wysokości ekranu */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ukrycie nadmiarowego kontentu */
+  animation: FadeIn 0.5s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtelna obwódka */
+  background-color: rgba(255, 255, 255, 0.2); /* Białe tło z przezroczystością */
+  overflow-x: hidden; /* Ukryj pasek przewijania w poziomie */
+}
+
+/* Kontener wiadomości */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto; /* Pozwala na przewijanie, jeśli wiadomości są długie */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  max-width: 100%;
+  height: 100%; /* Zajmuje całą dostępną przestrzeń w obrębie kontenera czatu */
+}
+
+/* Styl dla każdej wiadomości */
+.notification {
+  width: 100%;
+  max-width: 75%;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Delikatny cień dla wiadomości */
+  overflow-wrap: break-word; 
+}
+
+/* Wiadomości wysłane przez użytkownika (po prawej) */
+.notification.right {
+  background-color: #28a745; /* Zielony kolor dla użytkownika */
+  color: white;
+  align-self: flex-end;
+  border-radius: 20px 20px 0 20px;
+  padding: 15px;
+  max-width: 70%;
+  font-size: 18px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: slideInRight 0.3s ease-out;
+  word-wrap: break-word;
+}
+
+/* Wiadomości wysłane przez innych (po lewej) */
+.notification.left {
+  background-color: #e5e5ea;
+  color: #333;
+  align-self: flex-start;
+  border-radius: 20px 20px 20px 0;
+  padding: 15px;
+  max-width: 70%;
+  font-size: 18px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: slideInLeft 0.3s ease-out;
+  word-wrap: break-word;
+}
+
+/* Animacje wiadomości */
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Styl dla nagłówka czatu */
+.title-is-4 {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #28a745; /* Zielony kolor dla nagłówka */
+}
+
+/* Formularz */
+.chat-form {
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* Input do wiadomości */
+.input {
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 24px;
+  height: 59px;
+  resize: none;
+  width: 100%;
+}
+
+/* Przycisk wysyłania wiadomości */
+.button.is-info {
+  border-radius: 20px;
+  background-color: #28a745; /* Zielony przycisk */
+  color:white ;
+}
+
+/* Ukrycie paska przewijania */
+::-webkit-scrollbar {
+  display: none; /* Ukrywa pasek przewijania w Chrome/Safari */
+}
+
+::-moz-scrollbar {
+  display: none; /* Ukrywa pasek przewijania w Firefox */
+}

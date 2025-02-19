@@ -1,15 +1,21 @@
-// components/Chat/ChatLobby.js
+// components/Chat/ChatRoom.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/Chat.css';
 
-const ChatLobby = () => {
-  const [chatMessages, setChatMessages] = useState([{ id: 1, text: "Rozpocznij czat!", user: "System" }]);
-  const [messageInput, setMessageInput] = useState("");
-  const messagesEndRef = useRef(null);
-  const socket = useRef(null);
-  const usernameRef = useRef(localStorage.getItem('username') || 'Anonim');
+interface ChatMessage {
+  id: number;
+  text: string;
+  user: string;
+}
+
+const ChatRoom: React.FC<{ roomId: string }> = ({ roomId }) => {
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([{ id: 1, text: "Rozpocznij czat!", user: "System" }]);
+  const [messageInput, setMessageInput] = useState<string>("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const socket = useRef<WebSocket | null>(null);
+  const usernameRef = useRef<string>(localStorage.getItem('username') || 'Anonim');
   const accessToken = localStorage.getItem('access');
-  const [isTokenValid, setIsTokenValid] = useState(null);
+  const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
 
   useEffect(() => {
     setIsTokenValid(!!accessToken);
@@ -25,11 +31,11 @@ const ChatLobby = () => {
       return;
     }
 
-    const wsUrl = `ws://localhost:8000/ws/chat/lobby/?token=${accessToken}`;
+    const wsUrl = `ws://localhost:8000/ws/chat/${roomId}/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => {
-      console.log("✅ WebSocket połączony z lobby");
+      console.log("✅ WebSocket połączony z pokojem:", roomId);
     };
 
     socket.current.onerror = (error) => {
@@ -45,7 +51,7 @@ const ChatLobby = () => {
         {
           id: prevMessages.length + 1,
           text: data.message,
-          user: data.sender || usernameRef.current || "Inny",  
+          user: data.sender || usernameRef.current || "Inny",
         },
       ]);
     };
@@ -69,7 +75,7 @@ const ChatLobby = () => {
     }
   }, [isTokenValid]);
 
-  const sendMessage = (e) => {
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!socket.current || socket.current.readyState !== WebSocket.OPEN) {
@@ -120,4 +126,4 @@ const ChatLobby = () => {
   );
 };
 
-export default ChatLobby;
+export default ChatRoom;

@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const RegisterPage = () => {
+interface RegisterPageProps {
+  
+}
+
+interface RegisterPageState {
+  username: string;
+  email: string;
+  password: string;
+  message: string;
+  error: string;
+}
+
+const RegisterPage: React.FC<RegisterPageProps> = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = {
       username,
@@ -18,15 +31,22 @@ const RegisterPage = () => {
     };
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/accounts/register/', data);
-      setMessage('Rejestracja zakończona sukcesem!');
-      setError('');
-    } catch (err) {
-      setError('Błąd rejestracji: ' + err.response.data);
+      const response = await axios.post('http://127.0.0.1:8000/api/accounts/register/', data);
+      if (response.status === 201) {
+        setMessage('Rejestracja zakończona sukcesem!');
+        setError('');
+      } else {
+        throw new Error('Nieoczekiwana odpowiedź z serwera');
+      }
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        setError('Błąd rejestracji: ' + err.response.data);
+      } else {
+        setError('Błąd rejestracji: Nieznany błąd');
+      }
       setMessage('');
     }
-  };
-
+  }
   return (
     <div>
       <section className="section">
@@ -91,7 +111,7 @@ const RegisterPage = () => {
             </div>
 
           	<div className="field has-text-centered">
-            	<p>Masz już konto? <Link to="/">Zaloguj się</Link>></p>
+            	<p>Masz już konto? <Link to="/">Zaloguj się</Link></p>
           	</div>
           </form>
         </div>
