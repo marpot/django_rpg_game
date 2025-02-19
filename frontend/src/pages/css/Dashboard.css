@@ -25,6 +25,7 @@
   margin-top: 50px;
   text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
   letter-spacing: 1px;
+  
 }
 
 /* ----------------------------
@@ -85,6 +86,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .chat-section .title {
@@ -100,17 +102,16 @@
   overflow-y: auto;
   margin-bottom: 10px;
   width: 100%;
-  display:flex;
+  display: flex;
   flex-direction: column;
 }
 
 .chat-messages {
   width: 100%;
   max-width: 100%;
-  flex-grow: 1; /* Jeśli używamy flexboxa */
-  display: block; 
+  flex-grow: 1;
+  display: block;
 }
-
 
 .chat-input-container {
   display: flex;
@@ -161,8 +162,14 @@ button:hover {
    Responsywność
 ---------------------------- */
 @media (max-width: 768px) {
-  .rooms-section, .chat-section {
+  .rooms-section {
     max-width: 100%;
+    padding: 15px;
+  }
+
+  .chat-section {
+    max-width: 100%;
+    height: auto;
     padding: 15px;
   }
 
@@ -172,10 +179,52 @@ button:hover {
 
   .title {
     font-size: 2.5rem;
+    margin-top: 20px;
   }
 
   button {
     padding: 10px 20px;
     font-size: 1rem;
+  }
+
+  .rooms-section .title, .chat-section .title {
+    font-size: 1.5rem;
+  }
+
+  .rooms-section li {
+    font-size: 1rem;
+  }
+
+  .chat-input-container input {
+    font-size: 1rem;
+  }
+}
+
+/* ----------------------------
+   Dla większych ekranów
+---------------------------- */
+@media (min-width: 1024px) {
+  .dashboard-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .rooms-section, .chat-section {
+    max-width: 45%;
+    flex-grow: 1;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .rooms-section .title, .chat-section .title {
+    font-size: 2.5rem;
+  }
+
+  .rooms-section li {
+    font-size: 1.2rem;
   }
 }
