@@ -1,0 +1,33 @@
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__subtitle {
+  color: #fff !important;
+}
+
+.button.button--secondary.button--lg {
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+.button.button--secondary.button--lg:hover {
+  color: #fff !important;
+  border-color: #fff !important;
+  background-color: #333 !important;
+}

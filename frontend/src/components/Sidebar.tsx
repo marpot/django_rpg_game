@@ -16,6 +16,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   const menuItems: MenuItem[] = [
     { label: 'Dashboard', url: '/dashboard' },
     { label: 'Profil', url: '/profile' },
+    { label: 'Twórz pokój', url: '/create-room' },
     { label: 'Ustawienia', url: '/settings' },
     { label: 'Wyloguj się', url: '/' },
   ];

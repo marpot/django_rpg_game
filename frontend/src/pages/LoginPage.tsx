@@ -73,7 +73,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
               </label>
               <div className="control">
                 <input
-                  className="input has-text-black"
+                  className="input has-text-white"
                   type="text"
                   id="username"
                   value={username}
@@ -90,7 +90,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
               </label>
               <div className="control">
                 <input
-                  className="input has-text-black"
+                  className="input has-text-white"
                   type="password"
                   id="password"
                   value={password}

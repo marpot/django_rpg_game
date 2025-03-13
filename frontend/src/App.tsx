@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import LoginPage from './pages/LoginPage';
 import { useParams } from 'react-router';
+import CreateRoomPage from './pages/CreateRoomPage';
 
 interface AppProps {
   // Add any props you want to pass to the component here
@@ -27,14 +28,16 @@ const App: React.FC<AppProps> = () => {
           </MainLayout>
         } />
 
+        <Route path="/create-room" element={<CreateRoomPage />} />
+
         {/* Room Page */}
         <Route
           path="/room/:roomId"
           element={
-              <RoomPage roomId={useParams().roomId || 'defaultRoomId'} />
+              <RoomPage />
         }
         />
-
+      
         {/* Profile Page */}
         <Route
           path="/profile"
