@@ -1,1 +1,0 @@
-Zrób żeby można było dodawać pokoje i wybierać przygody w formularzu.

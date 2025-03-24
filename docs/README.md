@@ -1,41 +1,61 @@
-# Website
+# RPG Game Documentation
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+## Polish Documentation
 
-### Installation
+### Backend
+- [Dokumentacja Backendu](pl/backend/README.md)
+- [Dokumentacja API](pl/api/README.md)
 
-```
-$ yarn
-```
+### Frontend
+- [Dokumentacja Frontendu](pl/frontend/README.md)
 
-### Local Development
+## English Documentation
 
-```
-$ yarn start
-```
+### Backend
+- [Backend Documentation](en/backend/README.md)
+- [API Documentation](en/api/README.md)
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+### Frontend
+- [Frontend Documentation](en/frontend/README.md)
 
-### Build
+## Project Overview
 
-```
-$ yarn build
-```
+This is a text-based RPG game built with Django and React. The game features:
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+- User authentication and authorization
+- Character creation and management
+- Game sessions and progress tracking
+- Real-time chat functionality
+- Event-based gameplay system
+- Responsive web interface
 
-### Deployment
+## Quick Start
 
-Using SSH:
+1. Clone the repository
+2. Set up the backend:
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
+   python manage.py migrate
+   daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application
+   ```
 
-```
-$ USE_SSH=true yarn deploy
-```
+3. Set up the frontend:
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
 
-Not using SSH:
+4. Access the application at `http://localhost:3000`
 
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
+## Contributing
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

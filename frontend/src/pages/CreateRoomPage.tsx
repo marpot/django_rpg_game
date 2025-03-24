@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar'; // Import sidebar
 import CreateRoomForm from '../components/CreateRoomForm';
 
 const CreateRoomPage = () => {
   const [showCreateRoomForm, setShowCreateRoomForm] = useState(true);
+  const navigate = useNavigate();
 
   const handleRoomCreated = () => {
     setShowCreateRoomForm(false);
+
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1000);
   };
 
   return (
@@ -24,6 +30,11 @@ const CreateRoomPage = () => {
               {showCreateRoomForm && (
                 <div className="box has-background-dark has-text-black">
                   <CreateRoomForm onRoomCreated={handleRoomCreated} />
+                </div>
+              )}
+              {!showCreateRoomForm && (
+                <div className="notification is-success">
+                  <p className="has-text-centered">Pokój został utworzony pomyślnie! Przekierowywanie do poczekalni...</p>
                 </div>
               )}
             </div>

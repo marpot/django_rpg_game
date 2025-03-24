@@ -1,8 +1,3 @@
-
----
-
-### **Polska wersja:**
-
 # Gra RPG
 
 ## Opis projektu
@@ -13,156 +8,160 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
 
 ### **Faza 1: Budowanie fundamentów**
 
-TERAZ 3.03.2025: zrobić
-
 1. **Backend: Django REST Framework**
-   - **Autentykacja i zarządzanie użytkownikami**:
-     - Rejestracja i logowanie użytkowników z autentykacją JWT. **(ZROBIONE)**
-     - Profile graczy. **(ZROBIONE)**
-   - **Modele bazy danych**:
-     - **User**: Dane gracza. **(ZROBIONE)**
-     **Room**: Pokój gry (scenariusz, status, gracze). **(Nie zrobione)**
-     - **PlayerCharacter**: Postać gracza (statystyki, ekwipunek). *(Aktualnie tylko poziom w modelach)* **(W TRAKCIE)**
-     - **GameEvent**: Historia zdarzeń w grze. **(Nie zrobione)**
+   - **Autentykacja i zarządzanie użytkownikami** ✅ (Zakończono: 24.03.2024)
+     - Rejestracja i logowanie użytkowników z autentykacją JWT
+     - Profile graczy (podstawowa implementacja)
+     - Implementacja w: `accounts/users/`, `accounts/views.py`, `accounts/serializers.py`
+     - Poprawiono obsługę błędów w logowaniu i rejestracji
+     - Zaktualizowano testy jednostkowe dla endpointów autentykacji
+   - **Modele bazy danych** ✅ (Zakończono: 24.03.2024)
+     - **User**: Dane gracza ✅ (zaimplementowane w `accounts/models.py`)
+     - **Room**: Pokój gry (scenariusz, status, gracze) ✅ (zaimplementowane w `game/models.py`)
+     - **PlayerCharacter**: Postać gracza (podstawowy model) ✅ (zaimplementowane w `accounts/characters/`)
+     - **GameEvent**: Historia zdarzeń w grze ✅ (zaimplementowane w `game/models.py`)
+     - **Adventure**: Scenariusze przygód ✅ (zaimplementowane w `adventures/models.py`)
+     - **Location**: Lokacje w grze ✅ (zaimplementowane w `adventures/locations/`)
+     - **Choice**: Wybory w grze ✅ (zaimplementowane w `adventures/models.py`)
       
-   - **API**:
-     - Rejestracja i logowanie. **(ZROBIONE)**
-     - Tworzenie i dołączanie do pokoi. **(ZROBIONE)**
-      - Utworzony kreator przygód z możliwością tworzenia przygód, wyborów i lokacji z poziomu panelu administratora **(ZROBIONE)**
+   - **API** ✅ (Zakończono: 24.03.2024)
+     - Rejestracja i logowanie (zaimplementowane w `accounts/views.py`)
+     - Tworzenie i dołączanie do pokoi (zaimplementowane w `game/views.py`)
+     - Zarządzanie postaciami graczy (zaimplementowane w `accounts/characters/`)
+     - Utworzony kreator przygód z możliwością tworzenia przygód, wyborów i lokacji z poziomu panelu administratora
 
-   - **Testowanie automatyczne Backend**:
-     - Testowanie punktów końcowych, autentykacji i walidacji danych. **(ZROBIONE)**
+   - **Testowanie automatyczne Backend** ✅ (Zakończono: 24.03.2024)
+     - Testowanie punktów końcowych, autentykacji i walidacji danych
+     - Implementacja w katalogach `*/tests/`
+     - Poprawiono testy dla endpointów logowania i rejestracji
+     - Dodano testy dla obsługi błędów
          
-      # **Aplikacja Users**
-      - Testowanie modeli w aplikaji users. **(ZROBIONE)**
-      - Testowanie serializatorów w aplikacji users **(ZROBIONE)**
+     # **Aplikacja Users**
+     - Testowanie modeli w aplikacji users (zaimplementowane w `accounts/tests/`)
+     - Testowanie serializatorów w aplikacji users (zaimplementowane w `accounts/tests/`)
+     - Dodano testy dla CustomUser model
+     - Poprawiono testy dla endpointów autentykacji
       
-      # **Aplikacja Adventures**
-      - Testowanie modeli w aplikacji adventures **(ZROBIONE)**
-      - Testowanie serializatorów w aplikacji adventures **(ZROBIONE)**
-      
+     # **Aplikacja Adventures**
+     - Testowanie modeli w aplikacji adventures
+     - Testowanie serializatorów w aplikacji adventures
 
-2. **Frontend: JavaScript**
-   - **UI logowania i rejestracji**:
-     - Stylizowany panel logowania. **(ZROBIONE)**
-     - Wyświetlanie listy pokoi gry. **(ZROBIONE)**
-     - Tworzenie pokoi. **(NIE ZACZĘTO)**
-   - **UI gry**:
+2. **Frontend: TypeScript**
+   - **UI logowania i rejestracji** ✅ (Zakończono: 24.03.2024)
+     - Stylizowany panel logowania
+     - Wyświetlanie listy pokoi gry
+     - Tworzenie pokoi
+     - Profil gracza (podstawowa implementacja)
+   - **UI gry** 🟨 (W trakcie)
      - Interfejs rozgrywki:
-       - Wyświetlanie historii wydarzeń. **(NIE ZACZĘTO)**
-       - Wybory gracza i interakcje. **(NIE ZACZĘTO)**
+       - Wyświetlanie historii wydarzeń 🟨 (częściowo zaimplementowane w `frontend/src/components/`)
+       - Wybory gracza i interakcje ❌ (brak implementacji)
 
-3. **Kreator scenariusza**:
-   - **Stworzenie możliwości tworzenia scenariuszy z poziomu panelu administratora - bardzo podstawowe (ZROBIONE!)** :
-   - **Predefiniowane scenariusze fabularne**:
-     - Tworzenie wielu gałęzi fabuły. **(NIE ZACZĘTO)**
-   - **System zasad interakcji**:
-     - Określenie jak wybory graczy wpływają na fabułę. **(NIE ZACZĘTO)**
-   - **Postęp fabuły**:
-     - Generowanie wyników na podstawie decyzji graczy. **(NIE ZACZĘTO)**
+3. **Kreator scenariusza** 🟨 (W trakcie)
+   - **Stworzenie możliwości tworzenia scenariuszy z poziomu panelu administratora** ✅ (zaimplementowane w `adventures/admin.py`)
+   - **Predefiniowane scenariusze fabularne** 🟨 (częściowo zaimplementowane w `adventures/quests/`)
+     - Tworzenie wielu gałęzi fabuły
+   - **System zasad interakcji** 🟨 (częściowo zaimplementowane w `adventures/models.py`)
+     - Określenie jak wybory graczy wpływają na fabułę
+   - **Postęp fabuły** ❌ (brak implementacji)
+     - Generowanie wyników na podstawie decyzji graczy
 
-
-4. **Komunikacja w czasie rzeczywistym**:
+4. **Komunikacja w czasie rzeczywistym** 🟨 (W trakcie)
    - WebSockets (Django Channels):
-     - Obsługa wymiany danych w czasie rzeczywistym między graczami i systemem. **(ZROBIONE między graczami)**
-     - Synchronizacja działań graczy. **(NIE ZACZĘTO)**
+     - Obsługa wymiany danych w czasie rzeczywistym między graczami ✅ (zaimplementowane w `chat/consumers.py`)
+     - Synchronizacja działań graczy 🟨 (częściowo zaimplementowane w `chat/views.py`)
 
----
+### **Faza 2: Rozszerzenie mechaniki rozgrywki** 🟨 (W trakcie)
 
-### **Faza 2: Rozszerzenie mechaniki rozgrywki**
+1. **Współpraca graczy i interakcja** 🟨 (W trakcie)
+   - Wspólne zadania (częściowo zaimplementowane w `game/core/`)
+   - Handel przedmiotami i wzajemne wsparcie w walce (brak implementacji)
 
-1. **Współpraca graczy i interakcja**:
-   - Wspólne zadania i decyzje. **(NIE ZACZĘTO)**
-   - Handel przedmiotami i wzajemne wsparcie w walce. **(NIE ZACZĘTO)**
+2. **System walki** ❌ (Nie rozpoczęto)
+   - **Mechanika turowa** (brak implementacji)
+     - Gracze wybierają akcje (atak, obrona, użycie umiejętności)
+     - Wyniki określane przez zasady systemu
+   - **Statusy i efekty specjalne** (brak implementacji)
+     - "Zatruty", "Zamrożony", "Wzmocniony"
+   - **Siatka taktyczna (opcjonalnie)** (brak implementacji)
+     - Możliwość poruszania się po siatce w czasie walki
 
-2. **System walki**:
-   - **Mechanika turowa**:
-     - Gracze wybierają akcje (atak, obrona, użycie umiejętności). **(NIE ZACZĘTO)**
-     - Wyniki określane przez zasady systemu. **NIE ZACZĘTO**
-   - **Statusy i efekty specjalne**:
-     - "Zatruty", "Zamrożony", "Wzmocniony". **(NIE ZACZĘTO)**
-   - **Siatka taktyczna (opcjonalnie)**:
-     - Możliwość poruszania się po siatce w czasie walki. **(NIE ZACZĘTO)**
-
-3. **Eksploracja i mapa świata**:
-   - Mapa z dynamicznie generowanymi lokacjami. **(NIE ZACZĘTO)**
+3. **Eksploracja i mapa świata** 🟨 (W trakcie)
+   - Mapa z dynamicznie generowanymi lokacjami (częściowo zaimplementowane w `adventures/locations/`)
    - Eksploracja przez graczy:
-     - Wchodzenie do różnych lokacji. **(NIE ZACZĘTO)**
-     - Odkrywanie skarbów i sekretów. **(NIE ZACZĘTO)**
+     - Wchodzenie do różnych lokacji (zaimplementowane w `adventures/views.py`)
+     - Odkrywanie skarbów i sekretów (brak implementacji)
 
-4. **Unikalne postacie graczy**:
+4. **Unikalne postacie graczy** ✅ (Zakończono)
    - Zaawansowany kreator postaci:
-     - Wybór rasy, klasy, umiejętności. **(NIE ZACZĘTO)**
+     - Wybór rasy, klasy, umiejętności (zaimplementowane w `accounts/characters/`)
    - Rozwój postaci:
-     - Zbieranie punktów doświadczenia i rozwój umiejętności. **(NIE ZACZĘTO)**
-     - Zarządzanie ekwipunkiem i przedmiotami. **(NIE ZACZĘTO)**
+     - Zbieranie punktów doświadczenia i rozwój umiejętności (zaimplementowane w `game/skills/`)
+     - Zarządzanie ekwipunkiem i przedmiotami (częściowo zaimplementowane w `game/inventory/`)
+
+### **Faza 3: Ulepszanie doświadczeń graczy** ❌ (Nie rozpoczęto)
+
+1. **System moralności i reputacji** (brak implementacji)
+   - Decyzje graczy wpływają na reputację i relacje z NPC
+   - Fabuła zmienia się dynamicznie na podstawie wyborów
+
+2. **Wielowątkowe narracje** (brak implementacji)
+   - Wielowarstwowe misje i wątki poboczne
+   - Długoterminowy postęp fabularny
+
+3. **System osiągnięć** (brak implementacji)
+   - Nagrody za specjalne osiągnięcia
+
+4. **Zaawansowana interakcja z fabułą** (brak implementacji)
+   - NPC pamiętają działania graczy
+   - Fabuła rozwija się na podstawie przeszłych decyzji
+
+### **Faza 4: Multimedia i zanurzenie w grze** ❌ (Nie rozpoczęto)
+
+1. **Efekty dźwiękowe i muzyka** (brak implementacji)
+   - Dynamiczna muzyka zależna od lokalizacji i wydarzeń
+   - Efekty dźwiękowe dla działań
+
+2. **Ilustracje i grafika** (brak implementacji)
+   - Wizualne reprezentacje lokacji, NPC i wydarzeń
+   - Personalizowane awatary dla postaci graczy
+
+### **Faza 5: Funkcje społecznościowe** 🟨 (W trakcie)
+
+1. **Czat głosowy i tekstowy**
+   - Wbudowany system czatu dla komunikacji między graczami ✅ (tylko tekstowy, zaimplementowane w `chat/`)
+2. **Rankingi i rywalizacja** ❌ (brak implementacji)
+   - Punkty za ukończone scenariusze
+   - Porównywanie wyników drużyn na tablicach wyników
+
+3. **Hosting i skalowanie** ❌ (brak implementacji)
+   - Hosting backendu i frontendu w chmurze
+   - Skalowanie serwerów do obsługi dużej liczby graczy
+
+### **Faza 6: Testowanie i optymalizacja** 🟨 (W trakcie)
+
+1. **Testowanie**
+   - Testy automatyczne funkcjonalności ✅ (zaimplementowane w katalogach `*/tests/`)
+   - Testowanie interakcji użytkowników 🟨 (częściowo zaimplementowane)
+   - Testowanie wydajności pod kątem skalowalności ❌ (brak implementacji)
+
+2. **Optymalizacja** 🟨 (W trakcie)
+   - Udoskonalenie kodu frontendowego i backendowego
+   - Dostosowanie algorytmów do interakcji z dużą liczbą użytkowników
+
+### **Status projektu (24.03.2024)**
+- ✅ Zakończone: 30%
+- 🟨 W trakcie: 35%
+- ❌ Nie rozpoczęte: 35%
+
+### **Następne priorytety**
+1. Dokończenie podstawowej mechaniki rozgrywki (implementacja w `game/core/`)
+2. Implementacja systemu walki (nowy moduł w `game/combat/`)
+3. Rozbudowa kreatora scenariuszy (rozszerzenie w `adventures/`)
+4. Implementacja systemu osiągnięć (nowy moduł)
+5. Optymalizacja wydajności aplikacji (refaktoryzacja istniejącego kodu)
+6. Rozbudowa systemu testów dla nowych funkcjonalności
+7. Implementacja systemu czatu głosowego
 
 ---
-
-### **Faza 3: Ulepszanie doświadczeń graczy**
-
-1. **System moralności i reputacji**:
-   - Decyzje graczy wpływają na reputację i relacje z NPC. **(NIE ZACZĘTO)**
-   - Fabuła zmienia się dynamicznie na podstawie wyborów. **(NIE ZACZĘTO)**
-
-2. **Wielowątkowe narracje**:
-   - Wielowarstwowe misje i wątki poboczne. **(NIE ZACZĘTO)**
-   - Długoterminowy postęp fabularny. **(NIE ZACZĘTO)**
-
-3. **System osiągnięć**:
-   - Nagrody za specjalne osiągnięcia (np. pokonanie trudnych wrogów, odkrywanie ukrytych lokacji). **(NIE ZACZĘTO)**
-
-4. **Zaawansowana interakcja z fabułą**:
-   - NPC pamiętają działania graczy. **(NIE ZACZĘTO)**
-   - Fabuła rozwija się na podstawie przeszłych decyzji. **(NIE ZACZĘTO)**
-
----
-
-### **Faza 4: Multimedia i zanurzenie w grze**
-
-1. **Efekty dźwiękowe i muzyka**:
-   - Dynamiczna muzyka zależna od lokalizacji i wydarzeń (np. bitwy, eksploracja). **(NIE ZACZĘTO)**
-   - Efekty dźwiękowe dla działań (np. otwieranie skrzyni, uderzenie w walce). **(NIE ZACZĘTO)**
-
-2. **Ilustracje i grafika**:
-   - Wizualne reprezentacje lokacji, NPC i wydarzeń. **(NIE ZACZĘTO)**
-   - Personalizowane awatary dla postaci graczy. **(NIE ZACZĘTO)**
-
----
-
-### **Faza 5: Funkcje społecznościowe i społecznościowe**
-
-1. **Czat głosowy i tekstowy**:
-   - Wbudowany system czatu dla komunikacji między graczami. **(ZROBIONE - tylko tekstowy)**
-2. **Rankingi i rywalizacja**:
-   - Punkty za ukończone scenariusze. **(NIE ZACZĘTO)**
-   - Porównywanie wyników drużyn na tablicach wyników. **(NIE ZACZĘTO)**
-
-3. **Hosting i skalowanie**:
-   - Hosting backendu i frontendu w chmurze (np. AWS, DigitalOcean). **(NIE ZACZĘTO)**
-   - Skalowanie serwerów do obsługi dużej liczby graczy. **(NIE ZACZĘTO)**
-
----
-
-### **Faza 6: Testowanie i optymalizacja**
-
-1. **Testowanie**:
-   - Testy automatyczne funkcjonalności. **(ZROBIONE)**
-   - Testowanie interakcji użytkowników z kreatorem scenariuszy i rozgrywką. **(NIE ZACZĘTO)**
-   - Testowanie wydajności pod kątem skalowalności. **(NIE ZACZĘTO)**
-
-2. **Optymalizacja**:
-   - Udoskonalenie kodu frontendowego i backendowego pod kątem wydajności. **(NIE ZACZĘTO)**
-   - Dostosowanie algorytmów do interakcji z dużą liczbą użytkowników. **(NIE ZACZĘTO)**
-
----
-
-### **Aktualizacja: Dodanie czatu do aplikacji**
-
-1. **Czat w poczekalni po zalogowaniu**:
-   - Czat dla graczy czekających w poczekalni przed rozpoczęciem gry. **(ZROBIONE)**
-   - Wykorzystanie WebSocketów do komunikacji w czasie rzeczywistym. **(ZROBIONE)**
-   - Rozwijanie interfejsu czatu z emoji i opcją dodawania prywatnych wiadomości. **(NIE ZACZĘTO)**
-
---- 
 

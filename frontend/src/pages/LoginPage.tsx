@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 interface LoginResponse {
   access: string;
   refresh: string;
-  username: string;
 }
 
 interface LoginPageProps {}
@@ -17,6 +16,21 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const navigate = useNavigate();
+
+  // Funkcja do dekodowania tokena JWT
+  const decodeJWT = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Błąd dekodowania tokena:', error);
+      return null;
+    }
+  };
 
   // Funkcja do obsługi wysyłania formularza
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,14 +45,42 @@ const LoginPage: React.FC<LoginPageProps> = () => {
         password,
       });
 
-      console.log('🔍Odpowiedź z backendu:', response.data);
+      // Logowanie odpowiedzi z backendu
+      console.log('🔍 Odpowiedź z backendu:', response.data);
 
       if (response.data.access && response.data.refresh) {
+        // Dekodowanie tokena access
+        const decodedToken = decodeJWT(response.data.access);
+        console.log('🔍 Zdekodowany token:', decodedToken);
+        
+        if (!decodedToken || !decodedToken.user_id) {
+          throw new Error('Nie można zdekodować userId z tokena!');
+        }
+
+        // Zapisywanie tokenów
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
+        localStorage.setItem('userId', String(decodedToken.user_id));
         localStorage.setItem('username', username);
-        console.log('✅ Zalogowano pomyślnie');
-        navigate('/dashboard');
+
+        // Sprawdzanie czy tokeny zostały poprawnie zapisane
+        const savedAccess = localStorage.getItem('access');
+        const savedRefresh = localStorage.getItem('refresh');
+        const savedUserId = localStorage.getItem('userId');
+        const savedUsername = localStorage.getItem('username');
+
+        console.log('🔑 Zapisane dane:');
+        console.log('Access token:', savedAccess);
+        console.log('Refresh token:', savedRefresh);
+        console.log('UserID:', savedUserId, 'Typ:', typeof savedUserId);
+        console.log('Username:', savedUsername);
+
+        if (savedAccess && savedRefresh && savedUserId && savedUsername) {
+          console.log('✅ Zalogowano pomyślnie i zapisano tokeny');
+          navigate('/dashboard');
+        } else {
+          throw new Error('Błąd przy zapisywaniu tokenów!');
+        }
       } else {
         throw new Error('Brak tokenów w odpowiedzi!');
       }

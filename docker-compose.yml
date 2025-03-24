@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: django_rpg_game
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      - rpg_network
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - POSTGRES_DB=django_rpg_game
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+    networks:
+      - rpg_network
+    command: daphne rpg_project.asgi:application
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/app/frontend
+    depends_on:
+      - backend
+    networks:
+      - rpg_network
+
+networks:
+  rpg_network:
+    driver: bridge
