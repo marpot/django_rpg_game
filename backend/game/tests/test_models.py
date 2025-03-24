@@ -1,5 +1,5 @@
 import pytest
-from accounts.models import CustomUser
+from accounts.users.models import CustomUser
 from game.models import PlayerCharacter,GameEvent, GameSession
 
 

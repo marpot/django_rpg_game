@@ -1,0 +1,156 @@
+ERROR 2025-03-24 14:22:10,823 views 2864 140077034510016 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Invalid credentials', code='invalid')]}
+ERROR 2025-03-24 14:22:10,940 views 2864 140077034510016 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Invalid credentials', code='invalid')]}
+ERROR 2025-03-24 14:31:50,494 views 2917 139662071977664 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Nieprawidłowe dane logowania', code='invalid')]}
+INFO 2025-03-24 14:33:24,106 views 2943 140152671028928 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 14:33:24,108 serializers 2943 140152671028928 Próba logowania użytkownika: marpot
+ERROR 2025-03-24 14:33:24,159 serializers 2943 140152671028928 Nie znaleziono użytkownika: marpot
+ERROR 2025-03-24 14:33:24,162 views 2943 140152671028928 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Nieprawidłowe dane logowania', code='invalid')]}
+ERROR 2025-03-24 14:33:24,165 views 2943 140152671028928 Szczegóły błędu: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 14:35:30,276 views 2963 140614837475008 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 14:35:30,277 views 2963 140614837475008 Content-Type: application/json
+INFO 2025-03-24 14:35:30,278 views 2963 140614837475008 Metoda żądania: POST
+INFO 2025-03-24 14:35:30,279 serializers 2963 140614837475008 Próba logowania użytkownika: marpot
+INFO 2025-03-24 14:35:30,325 serializers 2963 140614837475008 Znaleziono użytkownika: marpot
+INFO 2025-03-24 14:35:30,817 serializers 2963 140614837475008 Hasło poprawne dla użytkownika: marpot
+INFO 2025-03-24 14:35:30,819 serializers 2963 140614837475008 Wygenerowano tokeny dla użytkownika: marpot
+INFO 2025-03-24 14:35:30,913 views 2963 140614837475008 Logowanie udane dla użytkownika: marpot
+INFO 2025-03-24 15:49:47,208 views 3228 140480296187584 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 15:49:47,216 views 3228 140480296187584 Content-Type: application/json
+INFO 2025-03-24 15:49:47,217 views 3228 140480296187584 Metoda żądania: POST
+INFO 2025-03-24 15:49:47,300 serializers 3228 140480296187584 Próba logowania użytkownika: marpot
+ERROR 2025-03-24 15:49:47,437 serializers 3228 140480296187584 Nie znaleziono użytkownika: marpot
+ERROR 2025-03-24 15:49:47,459 views 3228 140480296187584 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Nieprawidłowe dane logowania', code='invalid')]}
+ERROR 2025-03-24 15:49:47,462 views 3228 140480296187584 Szczegóły błędu: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 15:52:15,994 views 3274 140695050835648 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 15:52:15,995 views 3274 140695050835648 Content-Type: application/json
+INFO 2025-03-24 15:52:15,997 views 3274 140695050835648 Metoda żądania: POST
+INFO 2025-03-24 15:52:15,999 serializers 3274 140695050835648 Próba logowania użytkownika: marpot
+INFO 2025-03-24 15:52:16,085 serializers 3274 140695050835648 Znaleziono użytkownika: marpot
+INFO 2025-03-24 15:52:16,600 serializers 3274 140695050835648 Hasło poprawne dla użytkownika: marpot
+INFO 2025-03-24 15:52:16,602 serializers 3274 140695050835648 Wygenerowano tokeny dla użytkownika: marpot
+INFO 2025-03-24 15:52:16,666 views 3274 140695050835648 Logowanie udane dla użytkownika: marpot
+INFO 2025-03-24 16:03:09,072 views 3453 140525545797312 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 16:03:09,075 views 3453 140525545797312 Content-Type: application/json
+INFO 2025-03-24 16:03:09,078 views 3453 140525545797312 Metoda żądania: POST
+INFO 2025-03-24 16:03:09,080 serializers 3453 140525545797312 Próba logowania użytkownika: marpot
+INFO 2025-03-24 16:03:09,175 serializers 3453 140525545797312 Znaleziono użytkownika: marpot
+INFO 2025-03-24 16:03:09,669 serializers 3453 140525545797312 Hasło poprawne dla użytkownika: marpot
+INFO 2025-03-24 16:03:09,671 serializers 3453 140525545797312 Wygenerowano tokeny dla użytkownika: marpot
+INFO 2025-03-24 16:03:09,693 views 3453 140525545797312 Logowanie udane dla użytkownika: marpot
+INFO 2025-03-24 16:06:52,969 views 3506 140120744990400 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 16:06:52,970 views 3506 140120744990400 Content-Type: application/json
+INFO 2025-03-24 16:06:52,971 views 3506 140120744990400 Metoda żądania: POST
+INFO 2025-03-24 16:06:53,002 serializers 3506 140120744990400 Próba logowania użytkownika: marpot
+INFO 2025-03-24 16:06:53,048 serializers 3506 140120744990400 Znaleziono użytkownika: marpot
+INFO 2025-03-24 16:06:53,571 serializers 3506 140120744990400 Hasło poprawne dla użytkownika: marpot
+INFO 2025-03-24 16:06:53,573 serializers 3506 140120744990400 Wygenerowano tokeny dla użytkownika: marpot
+INFO 2025-03-24 16:06:53,588 views 3506 140120744990400 Logowanie udane dla użytkownika: marpot
+INFO 2025-03-24 16:07:04,531 views 3506 140120744990400 Metoda: POST
+INFO 2025-03-24 16:07:04,534 views 3506 140120744990400 Content-Type: application/json
+INFO 2025-03-24 16:07:04,536 views 3506 140120744990400 User: marpot
+INFO 2025-03-24 16:07:04,539 views 3506 140120744990400 Data: {'name': 'ppok', 'adventure': None}
+INFO 2025-03-24 16:08:48,641 views 3546 140001919116992 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 16:08:48,642 views 3546 140001919116992 Content-Type: application/json
+INFO 2025-03-24 16:08:48,643 views 3546 140001919116992 Metoda żądania: POST
+INFO 2025-03-24 16:08:48,645 serializers 3546 140001919116992 Próba logowania użytkownika: marpot
+INFO 2025-03-24 16:08:48,665 serializers 3546 140001919116992 Znaleziono użytkownika: marpot
+INFO 2025-03-24 16:08:49,170 serializers 3546 140001919116992 Hasło poprawne dla użytkownika: marpot
+INFO 2025-03-24 16:08:50,597 serializers 3546 140001919116992 Wygenerowano tokeny dla użytkownika: marpot
+INFO 2025-03-24 16:08:50,619 views 3546 140001919116992 Logowanie udane dla użytkownika: marpot
+INFO 2025-03-24 16:09:01,087 views 3546 140001919116992 Metoda: POST
+INFO 2025-03-24 16:09:01,088 views 3546 140001919116992 Content-Type: application/json
+INFO 2025-03-24 16:09:01,089 views 3546 140001919116992 User: marpot
+INFO 2025-03-24 16:09:01,091 views 3546 140001919116992 Data: {'name': 'proba1', 'adventure': None}
+INFO 2025-03-24 16:09:01,092 serializers 3546 140001919116992 to_internal_value - otrzymane dane: {'name': 'proba1', 'adventure': None}
+ERROR 2025-03-24 16:09:01,097 serializers 3546 140001919116992 Błąd w to_internal_value: {'adventure': [ErrorDetail(string='This field may not be null.', code='null')]}
+INFO 2025-03-24 16:11:23,774 views 3546 140000742065856 Metoda: POST
+INFO 2025-03-24 16:11:23,775 views 3546 140000742065856 Content-Type: application/json
+INFO 2025-03-24 16:11:23,777 views 3546 140000742065856 User: marpot
+INFO 2025-03-24 16:11:23,778 views 3546 140000742065856 Data: {'name': 'dsa', 'adventure': 1}
+INFO 2025-03-24 16:11:23,779 serializers 3546 140000742065856 to_internal_value - otrzymane dane: {'name': 'dsa', 'adventure': 1}
+INFO 2025-03-24 16:11:23,783 serializers 3546 140000742065856 to_internal_value - przetworzone dane: {'adventure': <Adventure: 1>, 'name': 'dsa'}
+INFO 2025-03-24 16:11:23,784 serializers 3546 140000742065856 validate - rozpoczęcie walidacji
+INFO 2025-03-24 16:11:23,786 serializers 3546 140000742065856 validate - otrzymane dane: {'adventure': <Adventure: 1>, 'name': 'dsa'}
+INFO 2025-03-24 16:11:23,788 serializers 3546 140000742065856 validate - sprawdzanie nazwy: dsa
+INFO 2025-03-24 16:11:23,792 serializers 3546 140000742065856 validate - nazwa jest unikalna
+INFO 2025-03-24 16:11:23,793 serializers 3546 140000742065856 validate - sprawdzanie przygody: 1
+INFO 2025-03-24 16:11:23,798 serializers 3546 140000742065856 validate - przygoda istnieje
+INFO 2025-03-24 16:11:23,799 serializers 3546 140000742065856 validate - walidacja zakończona pomyślnie
+INFO 2025-03-24 16:11:23,800 views 3546 140000742065856 Próba utworzenia pokoju przez użytkownika: marpot
+INFO 2025-03-24 16:11:23,801 views 3546 140000742065856 Otrzymane dane: {'name': 'dsa', 'adventure': 1}
+INFO 2025-03-24 16:11:23,811 views 3546 140000742065856 Pokój utworzony pomyślnie: dsa
+INFO 2025-03-24 16:13:01,408 views 3546 140000742065856 Metoda: POST
+INFO 2025-03-24 16:13:01,410 views 3546 140000742065856 Content-Type: application/json
+INFO 2025-03-24 16:13:01,411 views 3546 140000742065856 User: marpot
+INFO 2025-03-24 16:13:01,413 views 3546 140000742065856 Data: {'name': 'pokój2', 'adventure': 1}
+INFO 2025-03-24 16:13:01,414 serializers 3546 140000742065856 to_internal_value - otrzymane dane: {'name': 'pokój2', 'adventure': 1}
+INFO 2025-03-24 16:13:01,418 serializers 3546 140000742065856 to_internal_value - przetworzone dane: {'adventure': <Adventure: 1>, 'name': 'pokój2'}
+INFO 2025-03-24 16:13:01,420 serializers 3546 140000742065856 validate - rozpoczęcie walidacji
+INFO 2025-03-24 16:13:01,421 serializers 3546 140000742065856 validate - otrzymane dane: {'adventure': <Adventure: 1>, 'name': 'pokój2'}
+INFO 2025-03-24 16:13:01,424 serializers 3546 140000742065856 validate - sprawdzanie nazwy: pokój2
+INFO 2025-03-24 16:13:01,427 serializers 3546 140000742065856 validate - nazwa jest unikalna
+INFO 2025-03-24 16:13:01,428 serializers 3546 140000742065856 validate - sprawdzanie przygody: 1
+INFO 2025-03-24 16:13:01,430 serializers 3546 140000742065856 validate - przygoda istnieje
+INFO 2025-03-24 16:13:01,431 serializers 3546 140000742065856 validate - walidacja zakończona pomyślnie
+INFO 2025-03-24 16:13:01,432 views 3546 140000742065856 Próba utworzenia pokoju przez użytkownika: marpot
+INFO 2025-03-24 16:13:01,433 views 3546 140000742065856 Otrzymane dane: {'name': 'pokój2', 'adventure': 1}
+INFO 2025-03-24 16:13:01,440 views 3546 140000742065856 Pokój utworzony pomyślnie: pokój2
+INFO 2025-03-24 17:44:06,069 views 11828 9680 Otrzymane dane logowania: {'username': 'testuser', 'password': 'testpassword123'}
+INFO 2025-03-24 17:44:06,069 views 11828 9680 Content-Type: application/json
+INFO 2025-03-24 17:44:06,069 views 11828 9680 Metoda ��dania: POST
+INFO 2025-03-24 17:44:06,070 serializers 11828 9680 Pr�ba logowania u�ytkownika: testuser
+INFO 2025-03-24 17:44:06,071 serializers 11828 9680 Znaleziono u�ytkownika: testuser
+INFO 2025-03-24 17:44:06,734 serializers 11828 9680 Has�o poprawne dla u�ytkownika: testuser
+INFO 2025-03-24 17:44:06,735 serializers 11828 9680 Wygenerowano tokeny dla u�ytkownika: testuser
+INFO 2025-03-24 17:44:07,304 views 11828 9680 Logowanie udane dla u�ytkownika: testuser
+INFO 2025-03-24 17:44:07,339 views 11828 9680 Otrzymane dane logowania: {'username': 'wronguser', 'password': 'wrongpassword'}
+INFO 2025-03-24 17:44:07,339 views 11828 9680 Content-Type: application/json
+INFO 2025-03-24 17:44:07,339 views 11828 9680 Metoda ��dania: POST
+INFO 2025-03-24 17:44:07,340 serializers 11828 9680 Pr�ba logowania u�ytkownika: wronguser
+ERROR 2025-03-24 17:44:07,343 serializers 11828 9680 Nie znaleziono u�ytkownika: wronguser
+ERROR 2025-03-24 17:44:07,343 views 11828 9680 B��d walidacji logowania: {'non_field_errors': [ErrorDetail(string='Nieprawid�owe dane logowania', code='invalid')]}
+ERROR 2025-03-24 17:44:07,343 views 11828 9680 Szczeg�y b��du: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 17:45:19,478 views 1096 16448 Otrzymane dane logowania: {'username': 'testuser', 'password': 'testpassword123'}
+INFO 2025-03-24 17:45:19,478 views 1096 16448 Content-Type: application/json
+INFO 2025-03-24 17:45:19,478 views 1096 16448 Metoda ��dania: POST
+INFO 2025-03-24 17:45:19,478 serializers 1096 16448 Pr�ba logowania u�ytkownika: testuser
+INFO 2025-03-24 17:45:19,480 serializers 1096 16448 Znaleziono u�ytkownika: testuser
+INFO 2025-03-24 17:45:20,127 serializers 1096 16448 Has�o poprawne dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:20,128 serializers 1096 16448 Wygenerowano tokeny dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:20,178 views 1096 16448 Logowanie udane dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:20,185 views 1096 16448 Otrzymane dane logowania: {'username': 'wronguser', 'password': 'wrongpassword'}
+INFO 2025-03-24 17:45:20,186 views 1096 16448 Content-Type: application/json
+INFO 2025-03-24 17:45:20,186 views 1096 16448 Metoda ��dania: POST
+INFO 2025-03-24 17:45:20,186 serializers 1096 16448 Pr�ba logowania u�ytkownika: wronguser
+ERROR 2025-03-24 17:45:20,189 serializers 1096 16448 Nie znaleziono u�ytkownika: wronguser
+ERROR 2025-03-24 17:45:20,189 views 1096 16448 B��d walidacji logowania: {'non_field_errors': [ErrorDetail(string='No active account found with the given credentials', code='invalid')]}
+ERROR 2025-03-24 17:45:20,189 views 1096 16448 Szczeg�y b��du: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 17:45:38,666 views 12536 10652 Otrzymane dane logowania: {'username': 'testuser', 'password': 'testpassword123'}
+INFO 2025-03-24 17:45:38,667 views 12536 10652 Content-Type: application/json
+INFO 2025-03-24 17:45:38,667 views 12536 10652 Metoda ��dania: POST
+INFO 2025-03-24 17:45:38,667 serializers 12536 10652 Pr�ba logowania u�ytkownika: testuser
+INFO 2025-03-24 17:45:38,669 serializers 12536 10652 Znaleziono u�ytkownika: testuser
+INFO 2025-03-24 17:45:39,320 serializers 12536 10652 Has�o poprawne dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:39,320 serializers 12536 10652 Wygenerowano tokeny dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:39,376 views 12536 10652 Logowanie udane dla u�ytkownika: testuser
+INFO 2025-03-24 17:45:39,385 views 12536 10652 Otrzymane dane logowania: {'username': 'wronguser', 'password': 'wrongpassword'}
+INFO 2025-03-24 17:45:39,385 views 12536 10652 Content-Type: application/json
+INFO 2025-03-24 17:45:39,385 views 12536 10652 Metoda ��dania: POST
+INFO 2025-03-24 17:45:39,386 serializers 12536 10652 Pr�ba logowania u�ytkownika: wronguser
+ERROR 2025-03-24 17:45:39,389 serializers 12536 10652 Nie znaleziono u�ytkownika: wronguser
+ERROR 2025-03-24 17:45:39,389 views 12536 10652 B��d walidacji logowania: {'non_field_errors': [ErrorDetail(string='No active account found with the given credentials', code='invalid')]}
+ERROR 2025-03-24 17:45:39,390 views 12536 10652 Szczeg�y b��du: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 16:46:12,990 views 3546 140000742065856 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 16:46:12,997 views 3546 140000742065856 Content-Type: application/json
+INFO 2025-03-24 16:46:12,999 views 3546 140000742065856 Metoda żądania: POST
+INFO 2025-03-24 16:46:13,006 serializers 3546 140000742065856 Próba logowania użytkownika: marpot
+ERROR 2025-03-24 16:46:13,025 serializers 3546 140000742065856 Nie znaleziono użytkownika: marpot
+ERROR 2025-03-24 16:46:13,029 views 3546 140000742065856 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='Nieprawidłowe dane logowania', code='invalid')]}
+ERROR 2025-03-24 16:46:13,032 views 3546 140000742065856 Szczegóły błędu: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2025-03-24 16:46:50,982 views 4096 139712032429760 Otrzymane dane logowania: {'username': 'marpot', 'password': '321meme321'}
+INFO 2025-03-24 16:46:50,986 views 4096 139712032429760 Content-Type: application/json
+INFO 2025-03-24 16:46:50,988 views 4096 139712032429760 Metoda żądania: POST
+INFO 2025-03-24 16:46:51,024 serializers 4096 139712032429760 Próba logowania użytkownika: marpot
+ERROR 2025-03-24 16:46:51,081 serializers 4096 139712032429760 Nie znaleziono użytkownika: marpot
+ERROR 2025-03-24 16:46:51,084 views 4096 139712032429760 Błąd walidacji logowania: {'non_field_errors': [ErrorDetail(string='No active account found with the given credentials', code='invalid')]}
+ERROR 2025-03-24 16:46:51,086 views 4096 139712032429760 Szczegóły błędu: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}

@@ -3,18 +3,34 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-
+import logging
 
 from .models import Room
 from .serializers import RoomSerializer
+
+logger = logging.getLogger(__name__)
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = [IsAuthenticated] 
 
+    def create(self, request, *args, **kwargs):
+        logger.info(f"Metoda: {request.method}")
+        logger.info(f"Content-Type: {request.content_type}")
+        logger.info(f"User: {request.user}")
+        logger.info(f"Data: {request.data}")
+        return super().create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        logger.info(f"Próba utworzenia pokoju przez użytkownika: {self.request.user}")
+        logger.info(f"Otrzymane dane: {self.request.data}")
+        try:
+            room = serializer.save(owner=self.request.user)
+            logger.info(f"Pokój utworzony pomyślnie: {room.name}")
+        except Exception as e:
+            logger.error(f"Błąd podczas tworzenia pokoju: {str(e)}")
+            raise
 
 class RoomDetailView(APIView):
     permission_classes = [IsAuthenticated]

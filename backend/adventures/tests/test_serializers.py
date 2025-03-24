@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from adventures.serializers import AdventureSerializer, LocationSerializer, ChoiceSerializer
 from adventures.models import Adventure, Location, Choice
-from accounts.models import CustomUser
+from accounts.users.models import CustomUser
 
 def create_user():
     User = get_user_model()
