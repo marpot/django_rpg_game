@@ -8,7 +8,7 @@ import CreateRoomForm from '../components/CreateRoomForm';
 
 import axios from 'axios';
 import 'bulma/css/bulma.min.css';
-import { Room } from '../types';
+import { Room } from '../../types/types';
 
 // Dynamiczne ustawienie proxy
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';

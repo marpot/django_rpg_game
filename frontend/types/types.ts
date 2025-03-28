@@ -5,3 +5,10 @@ export type Room = {
     adventure_id?: number | null;
     adventure_title?: string | undefined;
 };
+
+export interface GameEventType {
+    id: string;
+    title: string;
+    description: string;
+    timestamp: string;
+}

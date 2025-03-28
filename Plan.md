@@ -36,15 +36,15 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
      - Poprawiono testy dla endpointów logowania i rejestracji
      - Dodano testy dla obsługi błędów
          
-     # **Aplikacja Users**
-     - Testowanie modeli w aplikacji users (zaimplementowane w `accounts/tests/`)
-     - Testowanie serializatorów w aplikacji users (zaimplementowane w `accounts/tests/`)
-     - Dodano testy dla CustomUser model
-     - Poprawiono testy dla endpointów autentykacji
-      
-     # **Aplikacja Adventures**
-     - Testowanie modeli w aplikacji adventures
-     - Testowanie serializatorów w aplikacji adventures
+         # **Aplikacja Users**
+         - Testowanie modeli w aplikacji users (zaimplementowane w `accounts/tests/`)
+         - Testowanie serializatorów w aplikacji users (zaimplementowane w `accounts/tests/`)
+         - Dodano testy dla CustomUser model
+         - Poprawiono testy dla endpointów autentykacji
+            
+         # **Aplikacja Adventures**
+         - Testowanie modeli w aplikacji adventures
+         - Testowanie serializatorów w aplikacji adventures
 
 2. **Frontend: TypeScript**
    - **UI logowania i rejestracji** ✅ (Zakończono: 24.03.2024)

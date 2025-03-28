@@ -2,12 +2,13 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Chat from '../components/Chat/ChatRoom';
 import './css/RoomPage.css';
-import { Room } from '../types';
+import { Room } from '../../types/types';
 
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();  // Pobieramy roomId z parametrów URL
   const navigate = useNavigate();
+
 
   if (!roomId) {
     return <div>Brak dostępnego pokoju.</div>;  // Jeśli roomId nie istnieje, wyświetl komunikat

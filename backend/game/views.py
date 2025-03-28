@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import GameSession, GameEvent
@@ -45,6 +45,11 @@ class GameEventViewSet(viewsets.ModelViewSet):
         adventure_id = self.request.query_params.get('adventure', None)
         event_type = self.request.query_params.get('event_type', None)
 
+        if player_id and not player_id.isdigit():
+            raise serializers.ValidationError('Player ID must be an integer')
+        if adventure_id and not adventure_id.isdigit():
+            raise serializers.ValidationError('Adventure ID must be an integer')
+
         if player_id:
             queryset = queryset.filter(player_id=player_id)
         if adventure_id:
@@ -53,6 +58,16 @@ class GameEventViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(event_type=event_type)
 
         return queryset
+    
+    @action(detail=False, methods=['get'])
+    def history(self, request):
+        """
+        Zwraca historię zdarzeń w porządku malejącym.
+        Tworzy nowy endpoint: /api/events/history/
+        """
+        events = GameEvent.objects.all().order_by('-timestamp')
+        serializer = GameEventSerializer(events, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def add_choice(self, request, pk=None):
