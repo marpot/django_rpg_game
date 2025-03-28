@@ -2,3 +2,5 @@
 logs/
 *.log
 django_debug.log 
+__pycache__/
+*.pyc
