@@ -13,6 +13,10 @@
     "removeComments": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@types/*": ["./types/*"],
+    }
   }
 }

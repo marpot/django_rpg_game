@@ -15,6 +15,9 @@ class PlayerCharacter(models.Model):
     strength = models.IntegerField(default=10)
     dexterity = models.IntegerField(default=10)
     intelligence = models.IntegerField(default=10)
+    current_location = models.CharField(max_length=100, null=True, blank=True)
+    adventure = models.CharField(max_length=100, null=True, blank=True)
+    stats = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

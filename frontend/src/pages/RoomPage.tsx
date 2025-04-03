@@ -2,12 +2,14 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Chat from '../components/Chat/ChatRoom';
 import './css/RoomPage.css';
-import { Room } from '../types';
+import { Room } from '../../types/types';
+import EventHistoryContainer from 'src/components/Room/EventHistory/EventHistoryContainer';
 
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();  // Pobieramy roomId z parametrów URL
   const navigate = useNavigate();
+
 
   if (!roomId) {
     return <div>Brak dostępnego pokoju.</div>;  // Jeśli roomId nie istnieje, wyświetl komunikat
@@ -27,7 +29,7 @@ const RoomPage: React.FC = () => {
       <main className="column is-6 p-4 has-background-dark">
         <h1 className="title has-text-white has-text-centered">🏰 Pokój: {roomId}</h1>
         <div className="story-log">
-          <p className="has-text-white">Narracja przygody pojawi się tutaj...</p>
+          <EventHistoryContainer roomId={roomId} />
         </div>
         <button className="button is-primary mt-4 ml-5">🎲 Rzuć Kością</button>
       </main>

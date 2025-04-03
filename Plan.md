@@ -36,15 +36,15 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
      - Poprawiono testy dla endpointów logowania i rejestracji
      - Dodano testy dla obsługi błędów
          
-     # **Aplikacja Users**
-     - Testowanie modeli w aplikacji users (zaimplementowane w `accounts/tests/`)
-     - Testowanie serializatorów w aplikacji users (zaimplementowane w `accounts/tests/`)
-     - Dodano testy dla CustomUser model
-     - Poprawiono testy dla endpointów autentykacji
-      
-     # **Aplikacja Adventures**
-     - Testowanie modeli w aplikacji adventures
-     - Testowanie serializatorów w aplikacji adventures
+         # **Aplikacja Users**
+         - Testowanie modeli w aplikacji users (zaimplementowane w `accounts/tests/`)
+         - Testowanie serializatorów w aplikacji users (zaimplementowane w `accounts/tests/`)
+         - Dodano testy dla CustomUser model
+         - Poprawiono testy dla endpointów autentykacji
+            
+         # **Aplikacja Adventures**
+         - Testowanie modeli w aplikacji adventures
+         - Testowanie serializatorów w aplikacji adventures
 
 2. **Frontend: TypeScript**
    - **UI logowania i rejestracji** ✅ (Zakończono: 24.03.2024)
@@ -92,11 +92,11 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
      - Wchodzenie do różnych lokacji (zaimplementowane w `adventures/views.py`)
      - Odkrywanie skarbów i sekretów (brak implementacji)
 
-4. **Unikalne postacie graczy** ✅ (Zakończono)
+4. **Unikalne postacie graczy** ❌ (Nie rozpoczęto)
    - Zaawansowany kreator postaci:
      - Wybór rasy, klasy, umiejętności (zaimplementowane w `accounts/characters/`)
    - Rozwój postaci:
-     - Zbieranie punktów doświadczenia i rozwój umiejętności (zaimplementowane w `game/skills/`)
+     - Zbieranie punktów doświadczenia i rozwój umiejętności (`game/skills/`)
      - Zarządzanie ekwipunkiem i przedmiotami (częściowo zaimplementowane w `game/inventory/`)
 
 ### **Faza 3: Ulepszanie doświadczeń graczy** ❌ (Nie rozpoczęto)
