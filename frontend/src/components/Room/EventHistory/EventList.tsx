@@ -7,13 +7,19 @@ interface EventListProps {
 }
 
 const EventList: React.FC<EventListProps> = ({ events }) => {
+
+  if (events.length === 0) {
+    return <p>Brak wydarzeń do wyświetlenia</p>;
+  }
+
   return (
-    <div>
-      {events.map((event, index) => (
-        <GameEvent key={index} event={event} />
+    <ul>
+      {events.map((event) => (
+        <li key={event.id}> 
+          <GameEvent event={event} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
-
 export default EventList;

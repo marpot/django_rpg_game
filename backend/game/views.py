@@ -34,7 +34,7 @@ class GameEventViewSet(viewsets.ModelViewSet):
         """
         Nadpisuje domyślną metodę do pobierania danych.
         Pozwala na filtrowanie zdarzeń po różnych parametrach.
-        
+
         Przykłady użycia:
         - /api/events/?player=1 - zdarzenia dla konkretnego gracza
         - /api/events/?adventure=1 - zdarzenia dla konkretnej przygody
@@ -59,13 +59,13 @@ class GameEventViewSet(viewsets.ModelViewSet):
 
         return queryset
     
-    @action(detail=False, methods=['get'])
-    def history(self, request):
+    @action(detail=False, methods=['get'], url_path='history/(?P<location_id>\d+)')
+    def history(self, request, location_id):
         """
-        Zwraca historię zdarzeń w porządku malejącym.
-        Tworzy nowy endpoint: /api/events/history/
+        Zwraca historię zdarzeń w porządku malejącym dla danej lokacji.
+        Endpoint: /api/events/history/{location_id}/
         """
-        events = GameEvent.objects.all().order_by('-timestamp')
+        events = GameEvent.objects.filter(location_id=location_id).order_by('-timestamp')
         serializer = GameEventSerializer(events, many=True)
         return Response(serializer.data)
 

@@ -1,0 +1,29 @@
+.nav-sidebar {
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.nav-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-sidebar li {
+  margin-bottom: 10px;
+}
+
+.nav-sidebar a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-sidebar a:hover {
+  color: #ccc;
+}

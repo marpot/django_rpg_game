@@ -92,11 +92,11 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
      - Wchodzenie do różnych lokacji (zaimplementowane w `adventures/views.py`)
      - Odkrywanie skarbów i sekretów (brak implementacji)
 
-4. **Unikalne postacie graczy** ✅ (Zakończono)
+4. **Unikalne postacie graczy** ❌ (Nie rozpoczęto)
    - Zaawansowany kreator postaci:
      - Wybór rasy, klasy, umiejętności (zaimplementowane w `accounts/characters/`)
    - Rozwój postaci:
-     - Zbieranie punktów doświadczenia i rozwój umiejętności (zaimplementowane w `game/skills/`)
+     - Zbieranie punktów doświadczenia i rozwój umiejętności (`game/skills/`)
      - Zarządzanie ekwipunkiem i przedmiotami (częściowo zaimplementowane w `game/inventory/`)
 
 ### **Faza 3: Ulepszanie doświadczeń graczy** ❌ (Nie rozpoczęto)

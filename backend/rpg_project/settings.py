@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-wss865iy-nc8egt#ojk_0(!94e55eqq3#wq1mefawuv(7^81ja'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']  # Zezwalaj na wszystkie hosty
 
@@ -56,11 +56,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'accounts.apps.AccountsConfig',
-    'accounts.users.apps.UsersConfig',
-    'accounts.characters.apps.CharactersConfig',
-    'chat.apps.ChatConfig',
-    'adventures.apps.AdventuresConfig',
-    'game.apps.GameConfig',
+    'accounts.users',
+    'accounts.characters',
+    'chat',
+    'adventures',
+    'game',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -105,22 +106,36 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],  # Ensure Redis is running
+            "hosts": [('redis', 6379)],
         },
     },
 }
+
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'django_rpg',
-        'USER': 'marpot',
-        'PASSWORD': '321meme321',
-        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',  
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http://localhost:\d+$",
+]
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -151,6 +166,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "rpg_project" / "static",
 ]
 
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REST Framework Settings
@@ -160,7 +178,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-AUTH_USER_MODEL = 'accounts_users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 3600
@@ -267,4 +285,11 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+    }
 }

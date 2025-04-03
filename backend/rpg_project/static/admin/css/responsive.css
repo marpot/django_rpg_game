@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-sidebar {
+    width: 150px;
+  }
+}

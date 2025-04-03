@@ -4,9 +4,19 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: django_rpg_game
+      POSTGRES_DB: django_rpg
     volumes:
       - ./data/db:/var/lib/postgresql/data
+    networks:
+      - rpg_network
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
       - rpg_network
 
@@ -14,26 +24,29 @@ services:
     build:
       context: ./backend
     environment:
-      - POSTGRES_DB=django_rpg_game
+      - POSTGRES_DB=django_rpg
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - ALLOWED_HOSTS=*
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
+      - ./backend/wait-for-it.sh:/app/wait-for-it.sh
+      - ./backend/entrypoint.sh:/app/entrypoint.sh  
     depends_on:
       - db
+      - redis
     networks:
       - rpg_network
-    command: daphne rpg_project.asgi:application
+    command: sh /app/entrypoint.sh  # Uruchomienie entrypoint.sh, które używa wait-for-it
 
   frontend:
     build:
       context: ./frontend
     ports:
       - "80:80"
-    volumes:
-      - ./frontend:/app/frontend
     depends_on:
       - backend
     networks:
