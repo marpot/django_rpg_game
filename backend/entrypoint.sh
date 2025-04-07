@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# Czekaj na dostępność bazy danych PostgreSQL
-echo "Czekam na dostępność bazy danych PostgreSQL..."
-/backend/wait-for-it.sh db:5432 --timeout=60 --strict -- echo "Baza danych jest gotowa!" || { echo "Baza danych jest niedostępna. Zatrzymuję skrypt."; exit 1; }
+echo "Sprawdzam dostępność bazy danych..."
+./wait-for-it.sh db:5432 --timeout=180 --strict -- echo "Baza danych gotowa!" | tee -a /var/log/entrypoint.log
+if [ $? -eq 0 ]; then
+  echo "Uruchamiam migracje bazy danych..."
+  python /app/manage.py migrate --noinput || { echo "Błąd migracji bazy danych!" | tee -a /var/log/entrypoint.log; exit 1; }
+else
+  echo "Baza danych niedostępna, zatrzymuję kontener..." | tee -a /var/log/entrypoint.log
+  exit 1
+fi
 
-# Uruchom migracje bazy danych
-echo "Uruchamiam migracje bazy danych..."
-python /backend/manage.py migrate --noinput || { echo "Migracja bazy danych nie powiodła się."; exit 1; }
-
-# Uruchom Daphne
 echo "Uruchamiam Daphne..."
-exec daphne -u /tmp/daphne.sock rpg_project.asgi:application || { echo "Uruchomienie Daphne nie powiodło się."; exit 1; }
+daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application || { echo "Błąd uruchamiania Daphne!" | tee -a /var/log/entrypoint.log; exit 1; }
