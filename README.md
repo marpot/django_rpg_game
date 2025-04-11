@@ -1,5 +1,3 @@
-Oto zaktualizowany plik `README.md`, uwzględniający Twoje pliki oraz komendy uruchamiania za pomocą `Makefile`:
-
 ```markdown
 # RPG Game
 
