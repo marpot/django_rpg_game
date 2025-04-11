@@ -1,3 +1,5 @@
+Oto zaktualizowany plik `README.md`, uwzględniający Twoje pliki oraz komendy uruchamiania za pomocą `Makefile`:
+
 ```markdown
 # RPG Game
 
@@ -69,6 +71,122 @@ npm install
 npm start
 ```
 
+### Docker Integration
+
+To simplify the setup and management of both backend and frontend containers, you can use the provided `Makefile` commands. Here are the common commands:
+
+#### Start Containers
+
+To start the containers in the background:
+
+```bash
+make up
+```
+
+#### Stop Containers
+
+To stop the containers:
+
+```bash
+make down
+```
+
+#### Build Containers
+
+To rebuild the containers:
+
+```bash
+make build
+```
+
+#### View Logs
+
+To view the logs of the containers in real-time:
+
+```bash
+make logs
+```
+
+#### Restart Project
+
+To restart the project (stop, build, start, and view logs):
+
+```bash
+make restart
+```
+
+#### Access Backend (Django) Container
+
+To enter the backend (Django) container:
+
+```bash
+make backend
+```
+
+#### Access Frontend (React) Container
+
+To enter the frontend (React) container:
+
+```bash
+make frontend
+```
+
+#### Django Migrations
+
+To apply Django migrations:
+
+```bash
+make migrate
+```
+
+#### Generate Django Migrations
+
+To generate Django migrations:
+
+```bash
+make makemigrations
+```
+
+#### Collect Static Files (Django)
+
+To collect static files in Django:
+
+```bash
+make collectstatic
+```
+
+#### Create Django Superuser
+
+To create a Django superuser:
+
+```bash
+make createsuperuser
+```
+
+#### Backend Testing
+
+To run backend tests:
+
+```bash
+make test-backend
+```
+
+#### Frontend Testing
+
+To run frontend tests:
+
+```bash
+make test-frontend
+```
+
+#### View Container Status
+
+To view the status of the containers:
+
+```bash
+make ps
+```
+
 ## Collaboration
 
 If you want to contribute to the project:
@@ -86,3 +204,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Authors
 
 - Marcin Potoczny
+```
