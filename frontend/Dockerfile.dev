@@ -1,0 +1,23 @@
+# Użycie lekkiego obrazu Node.js
+FROM node:16-alpine
+
+# Ustaw katalog roboczy
+WORKDIR /app
+
+# Kopiuj package.json i package-lock.json
+COPY package.json package-lock.json ./
+
+# Instaluj zależności
+RUN npm install
+
+# Kopiuj cały projekt
+COPY . .
+
+# Ustaw zmienną środowiskową
+ENV NODE_ENV=development
+
+# Otwórz port (Webpack Dev Server)
+EXPOSE 3000
+
+# Uruchom dev server
+CMD ["npm", "run", "dev"]

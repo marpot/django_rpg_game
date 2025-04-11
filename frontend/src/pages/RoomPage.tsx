@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Chat from '../components/Chat/ChatRoom';
 import './css/RoomPage.css';
 import { Room } from '../../types/types';
-import EventHistoryContainer from 'src/components/Room/EventHistory/EventHistoryContainer';
+import EventHistoryContainer from '../components/Room/EventHistory/EventHistoryContainer';
 
 
 const RoomPage: React.FC = () => {

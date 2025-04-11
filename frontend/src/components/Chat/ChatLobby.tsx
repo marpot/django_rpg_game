@@ -72,7 +72,8 @@ const ChatLobby: React.FC = () => {
         }
       };
     }
-  }, [isTokenValid]);
+  },
+  );
 
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

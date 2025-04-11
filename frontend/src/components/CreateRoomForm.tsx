@@ -11,6 +11,16 @@ type CreateRoomFormProps = {
 };
 
 
+/**
+ * Form for creating a new room.
+ *
+ * Handles fetching a list of adventures for the select element and
+ * creating a new room when the form is submitted.
+ *
+ * @param {Object} props
+ * @param {function} props.onRoomCreated - Called when a new room is created
+ * @return {JSX.Element} The form element
+ */
 const CreateRoomForm: React.FC<CreateRoomFormProps> = ({ onRoomCreated }) => {
   const { adventures, loading: adventuresLoading, error: adventuresError } = useFetchAdventures();
   const { roomName, setRoomName, adventureId, setAdventureId, handleSubmit, loading, error } = useCreateRoomForm(onRoomCreated);

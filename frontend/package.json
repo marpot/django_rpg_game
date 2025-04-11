@@ -2,22 +2,23 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "main": "src/index.ts",
+  "type": "module",
+  "main": "src/index.tsx",
   "dependencies": {
     "axios": "^1.7.9",
     "bulma": "^1.0.3",
     "cors": "^2.8.5",
-    "cra-template": "1.2.0",
+    "dotenv-webpack": "^8.1.0",
     "react": "^18.3.1",
     "react-bulma-components": "^4.1.0",
     "react-dom": "^18.0.0",
     "react-router": "^7.1.5",
-    "react-router-dom": "^7.1.5",
-    "react-scripts": "^5.0.1"
+    "react-router-dom": "^7.1.5"
   },
   "scripts": {
-    "start": "react-scripts start --entry src/index.ts",
-    "build": "react-scripts build",
+    "start": "webpack serve --mode development",
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
     "test": "jest",
     "eject": "react-scripts eject"
   },
@@ -40,15 +41,24 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-methods": "7.21.4-esm",
     "@babel/preset-env": "^7.26.7",
     "@babel/preset-react": "^7.26.3",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.3",
     "@types/react-router-dom": "^5.3.3",
     "babel-jest": "^29.7.0",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.6.3",
     "jest": "^27.5.1",
-    "react-test-renderer": "^18.0.0",
-    "typescript": "^4.9.5"
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.99.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
   },
   "proxy": "http://localhost:8000"
 }

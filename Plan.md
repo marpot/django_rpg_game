@@ -6,6 +6,9 @@ Jest to gra RPG, w której gracze mogą się logować, rejestrować, tworzyć po
 
 ## Plan tworzenia gry RPG z kreatorem scenariuszy
 
+### DevOps**
+   Priorytety na teraz: działający docker
+
 ### **Faza 1: Budowanie fundamentów**
 
 1. **Backend: Django REST Framework**

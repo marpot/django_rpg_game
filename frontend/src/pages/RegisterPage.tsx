@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../axiosConfig';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface RegisterPageProps {
@@ -31,7 +31,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/accounts/register/', data);
+      const response = await axios.post('/api/accounts/register/', data);
       if (response.status === 201) {
         setMessage('Rejestracja zakończona sukcesem!');
         setError('');

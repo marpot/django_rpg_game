@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AxiosResponse } from 'axios'; // Add this import
+import { AxiosResponse } from 'axios'; // Zmieniony import
 
 import RoomList from '../components/RoomList';
 import ChatLobby from '../components/Chat/ChatLobby';
 import CreateRoomForm from '../components/CreateRoomForm';
 
-import axios from 'axios';
+import axios from '../axiosConfig'; // Zmieniony import
 import 'bulma/css/bulma.min.css';
 import { Room } from '../../types/types';
-
-// Dynamiczne ustawienie proxy
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
-
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -26,7 +21,7 @@ const Dashboard = () => {
   const token = localStorage.getItem('access'); 
 
   useEffect(() => {
-    axios.get<Room[]>('/api/chat/rooms/', { // Remove the comma and pass the options object as the second argument
+    axios.get<Room[]>('/api/chat/rooms/', { 
       headers: {
         [Authorization]: `Bearer ${token}`,
       }

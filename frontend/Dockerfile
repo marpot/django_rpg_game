@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Instalacja zależności
-RUN npm install
+RUN npm install && npm cache clean --force
 
 # Kopiowanie reszty plików aplikacji
 COPY . .
@@ -21,6 +21,9 @@ FROM nginx:alpine
 
 # Kopiowanie zbudowanej aplikacji do katalogu serwera Nginx
 COPY --from=build /app/build /usr/share/nginx/html
+
+# Usuwanie domyślnego konfiguratora Nginx (jeśli nie jest potrzebny)
+RUN rm /etc/nginx/conf.d/default.conf
 
 # Eksponowanie portu 80
 EXPOSE 80

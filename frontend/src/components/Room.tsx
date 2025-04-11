@@ -2,7 +2,7 @@ import React from 'react';
 import Chat from './Chat/Chat';
 import '../css/Room.css';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axiosConfig'
 
 type RoomData = {
   name: string;
@@ -19,7 +19,7 @@ const Room: React.FC = () => {
   React.useEffect(() => {
     const fetchRoomData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/`);
+        const response = await axios.get(`/api/rooms/${roomId}/`); 
         console.log('Dane pokoju:', response.data);
         setRoomData(response.data);
         setLoading(false);

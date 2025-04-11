@@ -1,56 +1,72 @@
+version: '3.8'
+
 services:
   db:
-    image: postgres:14-alpine
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: django_rpg
+    image: postgres:14
+    env_file:
+      - .env.development
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+    hostname: db
     networks:
       - rpg_network
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "django_rpg", "-h", "db", "-p", "5432"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
   redis:
-    image: redis:alpine
+    image: redis:latest
     restart: always
     ports:
       - "6379:6379"
     networks:
       - rpg_network
+    env_file:
+      - .env.development
 
   backend:
     build:
       context: ./backend
-    environment:
-      - POSTGRES_DB=django_rpg
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - REDIS_HOST=redis
-      - ALLOWED_HOSTS=*
+      dockerfile: Dockerfile
+    env_file:
+      - .env.development
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
       - ./backend/wait-for-it.sh:/app/wait-for-it.sh
-      - ./backend/entrypoint.sh:/app/entrypoint.sh  
     depends_on:
       - db
       - redis
+    command: bash -c "./wait-for-it.sh db:5432 -- python manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application"
     networks:
       - rpg_network
-    command: sh /app/entrypoint.sh  # Uruchomienie entrypoint.sh, które używa wait-for-it
 
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env.development
     ports:
-      - "80:80"
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     networks:
       - rpg_network
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  db_data:
 
 networks:
   rpg_network:
