@@ -41,11 +41,9 @@ export default {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html'),
     }),
-    new Dotenv(
-      {
-        path: `.env.${process.env.NODE_ENV}`,
-      }
-    ), // To ładuje zmienne z .env / .env.development
+    new Dotenv({
+      path: `.env.${process.env.NODE_ENV}`,
+    }),
   ],
   devServer: {
     static: {
@@ -63,6 +61,7 @@ export default {
       {
         context: ['/api'],
         target: 'http://localhost:8000',
+        changeOrigin: true,
       },
     ],
   },
