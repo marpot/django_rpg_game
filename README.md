@@ -1,6 +1,4 @@
-Jasne! Oto zaktualizowany `README.md`, który uwzględnia zarówno opis projektu RPG, jak i nowe informacje dotyczące kontenerów Docker i użycia `Makefile`. Dodałem sekcję dotyczącą developmentu z Dockerem, opis `Makefile` oraz uprościłem uruchamianie aplikacji przez polecenia `make`.
 
----
 
 ```markdown
 # RPG Game
