@@ -245,10 +245,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Authors
 
 - Marcin Potoczny
-<<<<<<< HEAD
-```
-=======
-`
+
 ## Architecture Diagram
 
           +---------------------+
@@ -274,7 +271,9 @@ This project is licensed under the [MIT License](LICENSE).
     |                                 |
     v                                 v
 
-+------------------+ +---------------------+ | Database | | WebSockets Server | | (SQLite/PG) | | (Django Channels) | +------------------+ +---------------------+
++------------------+ +---------------------+
+| Database         | | WebSockets Server  |
+| (SQLite/PG)      | | (Django Channels)  |
++------------------+ +---------------------+
 
 Jeśli chcesz, mogę jeszcze dorzucić diagram architektury albo dodać przykład `.env.development`. Chcesz coś takiego?
->>>>>>> frontend-styling
