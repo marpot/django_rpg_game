@@ -1,4 +1,5 @@
 import React from 'react';
+import "../css/Chat.css";
 
 interface ChatHeaderProps {
   roomId?: string | number;
