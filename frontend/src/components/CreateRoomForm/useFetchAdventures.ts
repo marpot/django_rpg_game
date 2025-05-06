@@ -14,6 +14,8 @@ const useFetchAdventures = () => {
                      localStorage.getItem('access') || 
                      localStorage.getItem('accessToken');
         
+        console.log('Token:', token);
+
         if (!token) {
           setError('Brak tokenu autoryzacyjnego.');
           setLoading(false);
@@ -29,12 +31,15 @@ const useFetchAdventures = () => {
           withCredentials: true
         });
 
+        console.log('Response:', response);
+
         if (response.data) {
           setAdventures(response.data);
         } else {
           setError('Nie udało się pobrać przygód.');
         }
       } catch (err) {
+        console.error('Error:', err);
         setError('Nie udało się pobrać przygód.');
       } finally {
         setLoading(false);
@@ -47,4 +52,4 @@ const useFetchAdventures = () => {
   return { adventures, loading, error };
 };
 
-export default useFetchAdventures; 
+export default useFetchAdventures;

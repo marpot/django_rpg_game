@@ -1,26 +1,18 @@
 from pathlib import Path
 from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-wss865iy-nc8egt#ojk_0(!94e55eqq3#wq1mefawuv(7^81ja'
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']  # Zezwalaj na wszystkie hosty
 
 # CORS configuration
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:80',
-    'http://127.0.0.1:3000',
-]
-
-CORS_EXPOSE_HEADERS = [
-    'Content-Type',
-    'Authorization',
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
@@ -38,13 +30,7 @@ CORS_ALLOW_HEADERS = [
     'accept',
     'origin',
     'accept-encoding',
-    'X-Custom-Header',
-    'Access-Control-Allow-Origin',
-    'Access-Control-Allow-Headers',
-    'Access-Control-Allow-Methods',
 ]
-
-CORS_ORIGIN_ALLOW_ALL = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',

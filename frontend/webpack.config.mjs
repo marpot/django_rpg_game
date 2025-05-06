@@ -2,10 +2,13 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import Dotenv from 'dotenv-webpack'; // Dodajemy dotenv-webpack
+import Dotenv from 'dotenv-webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const isDocker = process.env.DOCKER === 'true';
+const backendHost = isDocker ? 'backend' : 'localhost';
 
 export default {
   entry: './src/index.tsx',
@@ -56,13 +59,22 @@ export default {
     watchFiles: ['src/**/*'],
     client: {
       overlay: true,
+      progress: true
     },
     proxy: [
       {
         context: ['/api'],
-        target: 'http://localhost:8000',
+        target: `http://${backendHost}:8000`,
         changeOrigin: true,
+        secure: false
       },
-    ],
-  },
+      {
+        context: ['/ws/chat'],
+        target: `ws://${backendHost}:8000`,
+        ws: true,
+        changeOrigin: true,
+        secure: false
+      }
+    ]
+  }
 };

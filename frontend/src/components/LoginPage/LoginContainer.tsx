@@ -8,6 +8,9 @@ type Props = {
 const LoginContainer = ({ children }: Props) => {
     return (
         <div className="login-container">
+            <div className="background-elements">
+                <div className="castle"></div>
+            </div>
             {children}
         </div>
     )
