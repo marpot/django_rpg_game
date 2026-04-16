@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'accounts.users',
     'accounts.characters',
     'chat',
-    'adventures',
+    'adventures', #'game.world',
     'game',
     'django_extensions',
 ]

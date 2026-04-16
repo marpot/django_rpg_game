@@ -1,17 +1,22 @@
 FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y bash && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    netcat-openbsd \
+    postgresql-client \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt /app/
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install psycopg2-binary
 
 COPY . /app/
 
-RUN python manage.py collectstatic --noinput
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["./entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
