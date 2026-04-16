@@ -22,7 +22,7 @@ const useFetchAdventures = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8000/api/adventures/', {
+        const response = await axios.get('http://localhost:8001/api/adventures/', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',

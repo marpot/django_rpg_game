@@ -28,7 +28,7 @@ const useCreateRoomForm = (onRoomCreated: () => void) => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/chat/rooms/',
+        'http://localhost:8001/api/chat/rooms/',
         {
           name: roomName,
           adventure: adventureId ?? null,

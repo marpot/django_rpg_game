@@ -11,6 +11,9 @@ from rest_framework import viewsets
 from .models import PlayerCharacter
 from .serializers import PlayerCharacterSerializer
 
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -24,15 +27,16 @@ class PlayerCharacterViewSet(viewsets.ModelViewSet):
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
 
-class UserRegisterView(viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserRegisterSerializer
+class UserRegisterView(APIView):
+	permission_classes = [AllowAny]
 
-	def create(self, request, *args, **kwargs):
-		serializer = self.get_serializer(data=request.data)
+	def post(self, request, *args, **kwargs):
+		serializer = UserRegisterSerializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.save()
+
 		refresh = RefreshToken.for_user(user)
+		
 		return Response({
 			'refresh': str(refresh),
 			'access': str(refresh.access_token),

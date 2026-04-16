@@ -30,7 +30,7 @@ const ChatLobby: React.FC = () => {
       return;
     }
 
-    const wsUrl = `ws://backend:8000/ws/chat/lobby/?token=${accessToken}`;
+    const wsUrl = `ws://backend:8001/ws/chat/lobby/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => {

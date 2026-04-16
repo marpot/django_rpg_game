@@ -31,7 +31,7 @@ const ChatRoom: React.FC<{ roomId: string }> = ({ roomId }) => {
       return;
     }
 
-    const wsUrl = `ws://backend:8000/ws/chat/${roomId}/?token=${accessToken}`;
+    const wsUrl = `ws://backend:8001/ws/chat/${roomId}/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => {
