@@ -27,3 +27,4 @@ class GameEventSerializer(serializers.ModelSerializer):
         choices.append(choice_data)
         self.instance.choices = choices
         self.instance.save()
+

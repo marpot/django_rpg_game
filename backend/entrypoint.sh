@@ -1,24 +1,41 @@
 #!/bin/sh
+set -e
 
-echo "Sprawdzam dostępność bazy danych..." | tee -a /var/log/entrypoint.log
-./wait-for-it.sh db:5432 --timeout=180 --strict -- echo "Baza danych gotowa!" | tee -a /var/log/entrypoint.log
-if [ $? -eq 0 ]; then
-  echo "Uruchamiam migracje bazy danych..." | tee -a /var/log/entrypoint.log
-  python /app/manage.py migrate --noinput 2>&1 | tee -a /var/log/entrypoint.log
-  if [ $? -ne 0 ]; then
-    echo "Błąd migracji bazy danych!" | tee -a /var/log/entrypoint.log
+echo "🧠 Backend starting..."
+
+echo "🔎 Waiting for DNS resolution of db..."
+
+until getent hosts db; do
+  echo "DNS not ready for db..."
+  sleep 1
+done
+
+echo "⏳ Waiting for PostgreSQL..."
+
+TIMEOUT=60
+COUNTER=0
+
+until PGPASSWORD=$POSTGRES_PASSWORD pg_isready -h db -p 5432 -U $POSTGRES_USER; do
+  echo "PostgreSQL not ready yet..."
+  sleep 2
+
+  COUNTER=$((COUNTER + 2))
+
+  if [ "$COUNTER" -ge "$TIMEOUT" ]; then
+    echo "❌ Timeout waiting for PostgreSQL!"
     exit 1
   fi
-else
-  echo "Baza danych niedostępna, zatrzymuję kontener..." | tee -a /var/log/entrypoint.log
-  exit 1
+done
+
+echo "✅ PostgreSQL is ready!"
+
+echo "📦 Running migrations..."
+python manage.py migrate --noinput
+
+if [ "$DJANGO_COLLECTSTATIC" = "1" ]; then
+  echo "📦 Collecting static files..."
+  python manage.py collectstatic --noinput
 fi
 
-echo "Uruchamiam Daphne..." | tee -a /var/log/entrypoint.log
-daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application 2>&1 | tee -a /var/log/entrypoint.log
-if [ $? -ne 0 ]; then
-  echo "Błąd uruchamiania Daphne!" | tee -a /var/log/entrypoint.log
-  exit 1
-fi
-
-# Usuń tail -f /dev/null, ponieważ Daphne powinien utrzymać kontener aktywnym
+echo "🚀 Starting Daphne..."
+exec daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application

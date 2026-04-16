@@ -8,7 +8,7 @@ down:
 
 # Budowanie kontenerów
 build:
-	docker-compose build
+	COMPOSE_BAKE=true docker-compose build
 
 # Podgląd logów na żywo
 logs:
@@ -17,7 +17,7 @@ logs:
 # Restart projektu - zatrzymaj, zbuduj, uruchom, pokaż logi
 restart:
 	docker-compose down
-	docker-compose build
+	COMPOSE_BAKE=true docker-compose build
 	docker-compose up -d
 	docker-compose logs -f
 

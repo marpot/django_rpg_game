@@ -31,11 +31,11 @@ const ChatRoom: React.FC<{ roomId: string }> = ({ roomId }) => {
       return;
     }
 
-    const wsUrl = `ws://localhost:8000/ws/chat/${roomId}/?token=${accessToken}`;
+    const wsUrl = `ws://backend:8000/ws/chat/${roomId}/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => {
-      console.log("✅ WebSocket połączony z pokojem:", roomId);
+      console.log("✅ WebSocket połączony z pokojem");
     };
 
     socket.current.onerror = (error) => {

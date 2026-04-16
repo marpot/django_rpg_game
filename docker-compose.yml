@@ -1,58 +1,64 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:14
-    env_file:
-      - .env.development
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: django_rpg
     volumes:
       - db_data:/var/lib/postgresql/data
-    hostname: db
     networks:
       - rpg_network
-    ports:
-      - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "django_rpg", "-h", "db", "-p", "5432"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
-      retries: 5
-      start_period: 10s
       timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: always
 
   redis:
-    image: redis:latest
+    image: redis:7
     restart: always
-    ports:
-      - "6379:6379"
     networks:
       - rpg_network
-    env_file:
-      - .env.development
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     env_file:
-      - .env.development
+      - .env.docker
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: django_rpg
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./backend:/app
-      - ./backend/wait-for-it.sh:/app/wait-for-it.sh
     depends_on:
-      - db
-      - redis
-    command: bash -c "./wait-for-it.sh db:5432 -- python manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application"
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - rpg_network
+    restart: on-failure
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     env_file:
-      - .env.development
+      - .env.docker
     ports:
       - "3000:3000"
     volumes:
@@ -63,7 +69,7 @@ services:
     networks:
       - rpg_network
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      CHOKIDAR_USEPOLLING: "true"
 
 volumes:
   db_data:

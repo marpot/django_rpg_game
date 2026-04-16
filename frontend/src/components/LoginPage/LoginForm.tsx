@@ -19,7 +19,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="box">
+    <form onSubmit={handleSubmit} className="form">
       {error && <p className="has-text-danger">{error}</p>}
       <div className="field">
         <label className="label">Nazwa użytkownika</label>
@@ -47,7 +47,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
 
       <div className="field">
         <div className="control">
-          <button type="submit" className="button is-primary is-fullwidth">
+          <button type="submit" className="button">
             Zaloguj się
           </button>
         </div>

@@ -30,7 +30,7 @@ const useChat = (roomId: string) => {
       socket.current.close();
     }
 
-    const wsUrl = `ws://backend:8000/ws/chat/${roomId}/?token=${accessToken}`;
+    const wsUrl = `ws://${window.location.hostname}:8000/ws/chat/${roomId}/?token=${accessToken}`;
     socket.current = new WebSocket(wsUrl);
 
     socket.current.onopen = () => console.log(`✅ WebSocket połączony z pokojem: ${roomId}`);

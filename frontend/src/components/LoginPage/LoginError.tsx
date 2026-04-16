@@ -6,7 +6,9 @@ interface LoginErrorProps {
 
 const LoginError: React.FC<LoginErrorProps> = ({ errorMessage }) => {
   return (
-    <p style={{ color: 'red' }}>{errorMessage}</p>
+    <div className="has-text-danger" style={{ textAlign: 'center', marginBottom: '1rem' }}>
+      {errorMessage}
+    </div>
   );
 };
 
