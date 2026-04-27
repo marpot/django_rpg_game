@@ -39,14 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'corsheaders',
+
     'accounts.apps.AccountsConfig',
     'accounts.users',
     'accounts.characters',
+
     'chat',
-    'adventures', #'game.world',
     'game',
+    'world.apps.WorldConfig',
+
     'django_extensions',
 ]
 
@@ -102,11 +106,12 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_rpg',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',  
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("DB_HOST", "db"),
+        'PORT': os.getenv("DB_PORT", "5432"),
+        'CONN_MAX_AGE': 60,
     }
 }
 
@@ -255,7 +260,7 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'adventures': {
+        'world': {
             'handlers': ['console', 'file', 'error_file'],
             'level': 'INFO',
             'propagate': True,
@@ -279,3 +284,13 @@ CACHES = {
         'LOCATION': 'redis://redis:6379/1',
     }
 }
+
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# CELERY CONFIG
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "Europe/Warsaw"

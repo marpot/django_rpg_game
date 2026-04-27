@@ -1,5 +1,5 @@
 from django.db import models
-from adventures.models import Adventure, Location
+from world.models import Adventure, Location
 from accounts.users.models import CustomUser
 
 class PlayerProfile(models.Model):

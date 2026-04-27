@@ -1,79 +1,127 @@
 services:
   db:
     image: postgres:14
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: django_rpg
+
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      - rpg_network
+
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
       timeout: 5s
       retries: 10
       start_period: 10s
-    restart: always
+
+    networks:
+      - backend_net
+
+    ports:
+      - "5433:5432"
 
   redis:
     image: redis:7
     restart: always
-    networks:
-      - rpg_network
+
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+    networks:
+      - backend_net
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    build: ./backend
     env_file:
       - .env.docker
-    environment:
-      DB_HOST: db
-      REDIS_HOST: redis
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: django_rpg
-    ports:
-      - "8001:8000"
+
     volumes:
       - ./backend:/app
+
+    ports:
+      - "8001:8000"
+
+    command: /app/entrypoints/web.sh
+
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    networks:
-      - rpg_network
-    restart: on-failure
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+
+    networks:
+      - backend_net
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  celery:
+    build: ./backend
     env_file:
       - .env.docker
+
+    command: /app/entrypoints/worker.sh
+
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    networks:
+      - backend_net
+
+  celery-beat:
+    build: ./backend
+    env_file:
+      - .env.docker
+
+    command: /app/entrypoints/beat.sh
+
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    networks:
+      - backend_net
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    depends_on:
-      - backend
-    networks:
-      - rpg_network
+    working_dir: /app
+    command: npm run dev
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
+    networks:
+      - backend_net
+
+networks:
+  backend_net:
+    driver: bridge
 
 volumes:
   db_data:
-
-networks:
-  rpg_network:
-    driver: bridge

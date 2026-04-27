@@ -1,11 +1,12 @@
 import pytest
-from adventures.models import Adventure, Location, Choice
+from world.models import Adventure, Location, Choice
 from accounts.users.models import CustomUser
 
 # _ to konwencja, oznaczająca zmienne, których nie zamierzamy używać. W user, adventure, _, _ = 
 #create_test_data() pomijamy location i choice, bo nie są nam potrzebne w tym teście. 
 
 def create_test_data():
+    
     user = CustomUser.objects.create_user(username='testuser', password='testpassword')
     adventure = Adventure.objects.create(title='Test Adventure', description='Test Description', creator=user)
     location = Location.objects.create(adventure=adventure, title='Test Location', description='Test Description')
