@@ -29,15 +29,23 @@ class UserLoginView(APIView):
         logger.info(f"Otrzymane dane logowania: {request.data}")
         logger.info(f"Content-Type: {request.content_type}")
         logger.info(f"Metoda żądania: {request.method}")
-        
+
         serializer = UserLoginSerializer(data=request.data)
 
         if serializer.is_valid():
             validated_data = serializer.validated_data
             logger.info(f"Logowanie udane dla użytkownika: {validated_data.get('username')}")
             return Response(validated_data, status=status.HTTP_200_OK)
-        
+
+        # Poprawiona obsługa błędów
         logger.error(f"Błąd walidacji logowania: {serializer.errors}")
-        logger.error(f"Szczegóły błędu: {serializer.error_messages}")
-        error_message = serializer.errors.get('non_field_errors', [''])[0]
-        return Response({'detail': error_message}, status=status.HTTP_401_UNAUTHORIZED) 
+
+        # Lepsze pobieranie komunikatu błędu
+        if serializer.errors:
+            # Jeśli są błędy pól (np. username required)
+            first_error = next(iter(serializer.errors.values()), ["Nieprawidłowe dane logowania."])[0]
+            error_detail = first_error if isinstance(first_error, str) else str(first_error)
+        else:
+            error_detail = "Nieprawidłowe dane logowania."
+
+        return Response({'detail': error_detail}, status=status.HTTP_401_UNAUTHORIZED)

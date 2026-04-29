@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/Chat.css";
+import "../styles/Chat.css";
 
 interface ChatMessageProps {
   user: string;

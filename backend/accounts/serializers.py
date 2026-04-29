@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model  							# Używamy get_user_model, aby odwołać się do niestandardowego modelu użytkownika, jeśli jest zdefiniowany
-from rest_framework_simplejwt.tokens import RefreshToken  					# Importujemy RefreshToken, który będzie generować tokeny JWT
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import PlayerCharacter
 
-User = get_user_model()  # Przypisujemy do zmiennej User model użytkownika
+User = get_user_model()
+
 
 class PlayerCharacterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,7 +20,6 @@ class PlayerCharacterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # Inicjalizacja pól JSON jeśli nie są podane
         if 'equipment' not in validated_data:
             validated_data['equipment'] = {}
         if 'inventory' not in validated_data:
@@ -32,34 +32,76 @@ class PlayerCharacterSerializer(serializers.ModelSerializer):
             validated_data['progress'] = {}
         return super().create(validated_data)
 
+
 class UserRegisterSerializer(serializers.ModelSerializer):
-    username = serializers.CharField() 
-    password = serializers.CharField(write_only=True)  						# Zdefiniowanie pola hasła jako tylko do zapisu (write_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
-        model = User  														# Określamy, że ten serializer dotyczy modelu User
-        fields = ['username', 'email', 'password']  						# Pola, które będą używane w rejestracji
+        model = User
+        fields = ['username', 'email', 'password']
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)  					# Nadpisujemy metodę create, aby stworzyć użytkownika
-        return user  														# Zwracamy stworzonego użytkownika
+        user = User.objects.create_user(**validated_data)
+        return user
+
 
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()  									# Pole dla nazwy użytkownika
-    password = serializers.CharField()  									# Pole dla hasła
+    username = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        username = attrs.get('username')  									# Pobieramy dane wejściowe z atrybutów
-        password = attrs.get('password')  									# Pobieramy dane wejściowe z atrybutów
+        # Krok A: Zawsze pokazujemy co dostajemy z frontendu
+        print("=== [LOGIN DEBUG] START ===", flush=True)
+        print(f"DEBUG LOGIN - Otrzymane dane: {attrs}", flush=True)
 
-        user = User.objects.filter(username=username).first()  				# Szukamy użytkownika w bazie danych po nazwie użytkownika
+        # Krok B: Wyciągamy pola
+        email = attrs.get('email')
+        username = attrs.get('username')
+        password = attrs.get('password')
 
-        if not user or not user.check_password(password):  					# Jeśli użytkownik nie istnieje lub hasło jest niepoprawne, zgłaszamy błąd
-            raise serializers.ValidationError("Invalid credentials")  		# Zgłaszamy błąd walidacji, jeśli dane są niepoprawne
+        # Debug - zobaczymy co dokładnie dostajemy
+        print(f"DEBUG LOGIN - Otrzymane dane: {attrs}", flush=True)
 
-        refresh = RefreshToken.for_user(user)  								# Jeśli wszystko jest w porządku (użytkownik istnieje, hasło poprawne), tworzymy tokeny JWT
-        return {  															# Zwracamy oba tokeny: refresh i access (token odświeżania i dostępowy)
-            'refresh': str(refresh),  										# Zwracamy token odświeżania jako string
-            'access': str(refresh.access_token),  	
-            'userId': user.id,			                                    # Zwracamy userId			
+        # Krok C: Sprawdzamy czy jest hasło
+        if not password:
+            print("DEBUG LOGIN - ERROR: No password provided", flush=True)
+            raise serializers.ValidationError({"detail": "Hasło jest wymagane."})
+
+        # Krok D: Sprawdzamy czy jest chociaż jeden login (email lub username)
+        if not email and not username:
+            print("DEBUG LOGIN - ERROR: Neither email nor username provided", flush=True)
+            raise serializers.ValidationError({"detail": "Email lub username jest wymagany."})
+
+        # Krok E: Logowanie przez email (priorytet)
+        if email:
+            print(f"DEBUG LOGIN - Próba logowania przez EMAIL: {email}", flush=True)
+            try:
+                user = User.objects.get(email=email)
+                print(f"DEBUG LOGIN - Znaleziono użytkownika po emailu: {user.username} (id={user.id})", flush=True)
+            except User.DoesNotExist:
+                print("DEBUG LOGIN - Nie znaleziono użytkownika o podanym emailu", flush=True)
+                raise serializers.ValidationError({"detail": "Nieprawidłowe dane logowania."})
+        # Krok F: Logowanie przez username (jeśli nie było emaila)
+        else:
+            print(f"DEBUG LOGIN - Próba logowania przez USERNAME: {username}", flush=True)
+            user = User.objects.filter(username=username).first()
+            if not user:
+                print("DEBUG LOGIN - Nie znaleziono użytkownika o podanym username", flush=True)
+                raise serializers.ValidationError({"detail": "Nieprawidłowe dane logowania."})
+
+        if not user.check_password(password):
+            print("DEBUG LOGIN - Hasło niepoprawne", flush=True)
+            raise serializers.ValidationError({"detail": "Nieprawidłowe dane logowania."})
+
+        print(f"DEBUG LOGIN - Logowanie udane dla użytkownika: {user.username}", flush=True)
+        print("=== [LOGIN DEBUG] END ===\n", flush=True)
+
+        refresh = RefreshToken.for_user(user)
+
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'userId': user.id,
+            'username': user.username,
         }

@@ -44,12 +44,13 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'accounts.apps.AccountsConfig',
-    'accounts.users',
-    'accounts.characters',
+    'accounts.users.apps.UsersConfig',
+    'accounts.characters.apps.CharactersConfig',
 
-    'chat',
-    'game',
+    'chat.apps.ChatConfig',
+    'game.apps.GameConfig',
     'world.apps.WorldConfig',
+    'core.apps.CoreConfig',                
 
     'django_extensions',
 ]

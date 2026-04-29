@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosResponse } from 'axios'; // Zmieniony import
 
 import RoomList from '../components/RoomList';
-import ChatLobby from '../components/Chat/ChatLobby';
+import Chat from '../features/chat/Chat';
 import CreateRoomForm from '../components/CreateRoomForm';
 
 import axios from '../axiosConfig'; // Zmieniony import
@@ -81,7 +81,7 @@ const Dashboard = () => {
             <div className="column is-6">
               <div className="box has-background-dark has-text-black">
                 <h2 className="title has-text-primary">Poczekalnia</h2>
-                <ChatLobby />
+                <Chat />
               </div>
             </div>
           </div>

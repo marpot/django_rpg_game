@@ -1,8 +1,8 @@
 import React from 'react';
-import Chat from './Chat/Chat';
 import '../css/Room.css';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosConfig'
+import Chat from '../features/chat/Chat';
 
 type RoomData = {
   name: string;

@@ -4,3 +4,4 @@ class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'accounts.users'
     verbose_name = 'Users' 
+    path = '/app/accounts/users'

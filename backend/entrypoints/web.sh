@@ -43,5 +43,6 @@ python manage.py migrate --noinput
 echo "📦 Collecting static..."
 python manage.py collectstatic --noinput
 
-echo "🚀 Starting server..."
-exec python manage.py runserver 0.0.0.0:8000
+echo "🚀 Starting ASGI server (Daphne)..."
+
+exec daphne -b 0.0.0.0 -p 8000 rpg_project.asgi:application
