@@ -70,6 +70,23 @@ export default function GameWindow({
   const logEndRef = useRef<HTMLDivElement | null>(null);
 
   const lastChoices = gameEvents[gameEvents.length - 1]?.payload?.choices || [];
+  const fallbackChoices = [
+    {
+      id: "inspect",
+      label: "Rozejrzyj się",
+      title: "Rozejrzyj się",
+      message: "sprawdź otoczenie",
+      action: "inspect",
+    },
+    {
+      id: "move",
+      label: "Idź dalej",
+      title: "Idź dalej",
+      message: "idź dalej",
+      action: "move",
+    },
+  ];
+  const visibleChoices = lastChoices.length > 0 ? lastChoices : fallbackChoices;
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -142,9 +159,9 @@ export default function GameWindow({
         <div ref={logEndRef} />
       </div>
 
-      {lastChoices.length > 0 && (
+      {visibleChoices.length > 0 && (
         <div className="choiceBar">
-          {lastChoices.map((choice: any, index: number) => (
+          {visibleChoices.map((choice: any, index: number) => (
             <button
               key={choice.id || `${choice.label}-${index}`}
               className="choiceButton"

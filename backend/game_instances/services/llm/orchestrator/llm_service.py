@@ -53,5 +53,25 @@ class LLMService:
                 "theme": "dark fantasy",
                 "tone": "grim",
                 "starting_state": "lobby_to_world_transition"
-            }
+            },
+            "choices": [
+                {
+                    "id": "inspect",
+                    "label": "Rozejrzyj się",
+                    "title": "Rozejrzyj się",
+                    "description": "Sprawdź otoczenie i ślady przygody.",
+                    "message": "sprawdź otoczenie",
+                    "action": "inspect",
+                    "target": None,
+                },
+                {
+                    "id": "move",
+                    "label": "Idź dalej",
+                    "title": "Idź dalej",
+                    "description": "Przejdź do kolejnego miejsca w przygodzie.",
+                    "message": "idź dalej",
+                    "action": "move",
+                    "target": None,
+                }
+            ]
         }
