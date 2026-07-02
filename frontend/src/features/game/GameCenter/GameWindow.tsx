@@ -12,7 +12,7 @@ function getEventClass(event: string) {
     case "game_started":
       return "system";
     case "action_result":
-      return "combat";
+      return "player";
     case "error":
       return "error";
     case "system":
@@ -21,6 +21,21 @@ function getEventClass(event: string) {
       return "error";
     default:
       return "narration";
+  }
+}
+
+function getEventLabel(event: string) {
+  switch (event) {
+    case "game_started":
+    case "system":
+      return "System";
+    case "action_result":
+      return "Ty";
+    case "error":
+    case "unknown":
+      return "Błąd";
+    default:
+      return "Mistrz Gry";
   }
 }
 
@@ -97,11 +112,20 @@ export default function GameWindow({
           </div>
         )}
 
-        {gameEvents.map((e, i) => (
-          <div key={i} className={`log-line ${getEventClass(e.event || e.type || "narration")}`}>
-            {renderText(e.text || e.payload?.text || "")}
-          </div>
-        ))}
+        {gameEvents.map((e, i) => {
+          const eventType = e.event || e.type || "narration";
+          const eventClass = getEventClass(eventType);
+          const label = getEventLabel(eventType);
+
+          return (
+            <div key={i} className={`log-line ${eventClass}`}>
+              <div className="bubble">
+                <div className="bubble-label">{label}</div>
+                <div className="bubble-text">{renderText(e.text || e.payload?.text || "")}</div>
+              </div>
+            </div>
+          );
+        })}
 
         <div ref={logEndRef} />
       </div>
