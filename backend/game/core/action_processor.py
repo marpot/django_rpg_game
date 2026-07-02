@@ -44,8 +44,6 @@ class ActionProcessor:
         action = parsed_input.get("action")
         world = parsed_input.get("world")
 
-        logger.info(f"[ACTION PROCESS] action={action}")
-
         if parsed_input.get("error") == "unknown_intent_fallback":
             return self._handle_inspect(parsed_input)
 

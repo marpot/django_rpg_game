@@ -7,17 +7,43 @@ type Props = {
   sendGame: (data: any) => void;
 };
 
-function getEventClass(type: string) {
-  switch (type) {
+function getEventClass(event: string) {
+  switch (event) {
     case "game_started":
       return "system";
     case "action_result":
-      return "player";
+      return "combat";
     case "error":
+      return "error";
+    case "system":
+      return "system";
+    case "unknown":
       return "error";
     default:
       return "narration";
   }
+}
+
+function renderText(text: any): string {
+  if (!text) return "";
+
+  if (typeof text === "string") {
+    try {
+      const parsed = JSON.parse(text);
+      if (typeof parsed === "object" && parsed !== null) {
+        return parsed.text || parsed.narration || parsed.description || parsed.message || text;
+      }
+    } catch {
+      // no-op
+    }
+    return text;
+  }
+
+  if (typeof text === "object" && text !== null) {
+    return text.text || text.narration || text.description || text.message || JSON.stringify(text);
+  }
+
+  return String(text);
 }
 
 export default function GameWindow({
@@ -52,17 +78,28 @@ export default function GameWindow({
         </div>
       </div>
 
-      {world && (
+      {world ? (
         <div className="world">
-          <h2>{world.name || world.title || world.intro || "World"}</h2>
+          <h2>{world.name || world.title || "World"}</h2>
           <p>{world.description || world.lore?.situation || world.situation || world.intro || ""}</p>
+        </div>
+      ) : (
+        <div className="world">
+          <h2>🕯️ Przygotowanie przygody</h2>
+          <p>Witaj w pokoju. Host rozpocznie przygodę, a Mistrz Gry od razu wypełni świat narracją.</p>
         </div>
       )}
 
       <div className="log">
+        {gameEvents.length === 0 && (
+          <div className="log-line system">
+            Czekasz na rozpoczęcie przygody. Naciśnij Start gry i wpisz pierwszą akcję.
+          </div>
+        )}
+
         {gameEvents.map((e, i) => (
-          <div key={i} className={`log-line ${getEventClass(e.type)}`}>
-            {e.text}
+          <div key={i} className={`log-line ${getEventClass(e.event || e.type || "narration")}`}>
+            {renderText(e.text || e.payload?.text || "")}
           </div>
         ))}
 
