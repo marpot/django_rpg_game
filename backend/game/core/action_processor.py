@@ -12,6 +12,7 @@ from game.state.runtime.models import Enemy as RuntimeEnemy
 from world.models import Enemy as EnemyORM
 
 from game.core.action_attack import AttackAction
+from game.core.action_move import MoveAction
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,15 @@ class ActionProcessor:
         self.attack_action = AttackAction(
             state_manager=self.state_manager,
             combat_service=self.combat_service,
+            resolver=self.resolver,
+            runtime_player_service=self.runtime_player_service,
+            choice_service=self.choice_service,
+            narrate_fn=self._narrate,
+            response_fn=self._response,
+        )
+
+        self.move_action = MoveAction(
+            state_manager=self.state_manager,
             resolver=self.resolver,
             runtime_player_service=self.runtime_player_service,
             choice_service=self.choice_service,
@@ -140,7 +150,7 @@ class ActionProcessor:
             return result
 
         if action == "move":
-            result = self._handle_move(parsed_input, world)
+            result = self.move_action.handle(parsed_input, world)
 
             if user_id is not None:
                 self._record_history(room_obj, user_id, action, result.get("result", {}))
@@ -192,44 +202,6 @@ class ActionProcessor:
             "inspect",
             narration.get("text", "Rozglądasz się po okolicy"),
             {"room": room_key, "enemies": enemies},
-            world,
-            choices,
-        )
-
-    # -------------------------
-    # MOVE
-    # -------------------------
-    def _handle_move(self, parsed_input, world=None):
-        room = parsed_input.get("room")
-        user_id = parsed_input.get("user_id")
-        target = parsed_input.get("target")
-
-        room_key = self.state_manager.normalize_room_id(room)
-        room_obj = self.state_manager.get_or_create_room(room_key)
-
-        player = self.runtime_player_service.get_or_create(room_obj, user_id)
-
-        if not player:
-            return self._response("move", "Player not found", {"error": "no_player"})
-
-        player.location = target or "unknown"
-
-        narration = self._narrate("move", {
-            "location": player.location
-        }, world)
-
-        choices = self.choice_service.build_choices(
-            adventure_id=parsed_input.get("adventure"),
-            room_key=room_key,
-            event_type="move",
-            result={"location": player.location},
-            world=world,
-        )
-
-        return self._response(
-            "move",
-            narration.get("text", f"Przemieszczasz się do: {player.location}"),
-            {"location": player.location},
             world,
             choices,
         )
