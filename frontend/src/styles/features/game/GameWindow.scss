@@ -124,6 +124,32 @@
   font-size: 14px;
 }
 
+/* CHOICE BAR */
+.choiceBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, #0d0d0d, #0a0a0a);
+}
+
+.choiceButton {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 208, 138, 0.25);
+  background: rgba(245, 208, 138, 0.1);
+  color: #f5d08a;
+  cursor: pointer;
+  transition: 0.15s ease;
+  font-size: 13px;
+}
+
+.choiceButton:hover {
+  background: rgba(245, 208, 138, 0.2);
+  border-color: #f5d08a;
+}
+
 /* INPUT BAR */
 .inputBar {
   display: flex;

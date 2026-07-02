@@ -69,6 +69,8 @@ export default function GameWindow({
   const [input, setInput] = useState("");
   const logEndRef = useRef<HTMLDivElement | null>(null);
 
+  const lastChoices = gameEvents[gameEvents.length - 1]?.payload?.choices || [];
+
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [gameEvents]);
@@ -82,6 +84,16 @@ export default function GameWindow({
     });
 
     setInput("");
+  };
+
+  const handleChoice = (choice: any) => {
+    const message = choice?.message || choice?.label || choice?.title || "";
+    if (!message) return;
+
+    sendGame({
+      type: "player_action",
+      message,
+    });
   };
 
   return (
@@ -129,6 +141,20 @@ export default function GameWindow({
 
         <div ref={logEndRef} />
       </div>
+
+      {lastChoices.length > 0 && (
+        <div className="choiceBar">
+          {lastChoices.map((choice: any, index: number) => (
+            <button
+              key={choice.id || `${choice.label}-${index}`}
+              className="choiceButton"
+              onClick={() => handleChoice(choice)}
+            >
+              {choice.label || choice.title || choice.message || "Dalej"}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="inputBar">
         <input

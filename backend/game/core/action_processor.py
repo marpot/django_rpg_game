@@ -1,5 +1,6 @@
 import logging
 
+from game.core.choice_service import AdventureChoiceService
 from game.services.combat_service import CombatService
 from game.services.dice_service import DiceService
 from game.state.resolver.entity_resolver import EntityResolver
@@ -19,6 +20,7 @@ class ActionProcessor:
         self.combat_service = combat_service or CombatService(DiceService())
         self.resolver = resolver or EntityResolver(state_manager)
         self.runtime_player_service = RuntimePlayerService(state_manager)
+        self.choice_service = AdventureChoiceService()
 
     def _response(self, event_type: str, text: str, result=None, world=None, choices=None):
         return {
@@ -148,6 +150,18 @@ class ActionProcessor:
             "winner": result.winner,
         }, world)
 
+        choices = self.choice_service.build_choices(
+            adventure_id=parsed_input.get("adventure"),
+            room_key=room_key,
+            event_type="attack",
+            result={
+                "winner": result.winner,
+                "attacker_damage": result.attacker_damage,
+                "defender_damage": result.defender_damage,
+            },
+            world=world,
+        )
+
         return self._response(
             "attack",
             narration.get("text", "Walka zakończona"),
@@ -156,6 +170,8 @@ class ActionProcessor:
                 "attacker_damage": result.attacker_damage,
                 "defender_damage": result.defender_damage,
             },
+            world,
+            choices,
         )
 
     # -------------------------
@@ -176,6 +192,14 @@ class ActionProcessor:
             "enemies": enemies
         }, world)
 
+        choices = self.choice_service.build_choices(
+            adventure_id=parsed_input.get("adventure"),
+            room_key=room_key,
+            event_type="inspect",
+            result={"room": room_key, "enemies": enemies},
+            world=world,
+        )
+
         return self._response(
             "inspect",
             narration.get("text", "Rozglądasz się po okolicy"),
@@ -183,6 +207,8 @@ class ActionProcessor:
                 "room": room_key,
                 "enemies": enemies,
             },
+            world,
+            choices,
         )
 
     # -------------------------
@@ -207,8 +233,18 @@ class ActionProcessor:
             "location": player.location
         }, world)
 
+        choices = self.choice_service.build_choices(
+            adventure_id=parsed_input.get("adventure"),
+            room_key=room_key,
+            event_type="move",
+            result={"location": player.location},
+            world=world,
+        )
+
         return self._response(
             "move",
             narration.get("text", f"Przemieszczasz się do: {player.location}"),
             {"location": player.location},
+            world,
+            choices,
         )
