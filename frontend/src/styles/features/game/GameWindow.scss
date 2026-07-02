@@ -1,5 +1,6 @@
 .gameWindow {
-  height: 100vh;
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -59,60 +60,114 @@
 
 /* LINE BASE */
 .log-line {
+  display: flex;
   margin-bottom: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  line-height: 1.4;
   animation: fadeIn 0.2s ease-in;
-  max-width: 900px;
 }
 
-/* SYSTEM (RPG UI - jak "SYSTEM MESSAGE") */
-.log-line.system {
-  color: #a3a3a3;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
+.log-line.player {
+  justify-content: flex-end;
+}
 
-  background: rgba(255,255,255,0.03);
-  border-left: 2px solid #666;
+.log-line.system,
+.log-line.narration,
+.log-line.error {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: min(85%, 820px);
+  padding: 10px 12px;
+  border-radius: 14px;
+  line-height: 1.45;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.log-line.system .bubble {
+  color: #c7c7c7;
+  background: rgba(255,255,255,0.04);
+  border-left: 3px solid #8b8b8b;
+}
+
+.log-line.narration .bubble {
+  color: #f5d08a;
+  background: rgba(245, 208, 138, 0.1);
+  border-left: 3px solid #f5d08a;
+}
+
+.log-line.player .bubble {
+  color: #dff7ff;
+  background: rgba(56, 189, 248, 0.12);
+  border-left: 3px solid #38bdf8;
+}
+
+.log-line.error .bubble {
+  color: #fecaca;
+  background: rgba(248, 113, 113, 0.12);
+  border-left: 3px solid #ef4444;
+}
+
+.bubble-label {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   opacity: 0.8;
 }
 
-/* NARRATION (WORLD STORY) */
-.log-line.narration {
+.bubble-text {
+  font-size: 14px;
+}
+
+/* CHOICE BAR */
+.turnHint {
+  padding: 8px 14px 0;
+  font-size: 12px;
   color: #f5d08a;
-  background: rgba(245, 208, 138, 0.06);
-  border-left: 2px solid #f5d08a;
-  box-shadow: 0 0 20px rgba(245, 208, 138, 0.05);
+  opacity: 0.95;
 }
 
-/* PLAYER ACTION / RESPONSE */
-.log-line.player {
-  color: #7dd3fc;
-  background: rgba(125, 211, 252, 0.05);
-  border-left: 2px solid #38bdf8;
+.choiceBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 14px 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, #0d0d0d, #0a0a0a);
 }
 
-/* ERROR */
-.log-line.error {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.06);
-  border-left: 2px solid #ef4444;
+.choiceButton {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 208, 138, 0.25);
+  background: rgba(245, 208, 138, 0.1);
+  color: #f5d08a;
+  cursor: pointer;
+  transition: 0.15s ease;
+  font-size: 13px;
 }
 
-/* DEFAULT */
-.log-line.default {
-  color: #e5e5e5;
-  background: rgba(255,255,255,0.02);
-  border-left: 2px solid rgba(255,255,255,0.1);
+.choiceButton:hover {
+  background: rgba(245, 208, 138, 0.2);
+  border-color: #f5d08a;
+}
+
+.choiceButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* INPUT BAR */
 .inputBar {
   display: flex;
   gap: 10px;
-  padding: 14px;
+  padding: 12px 14px 14px;
   border-top: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
   background: linear-gradient(180deg, #0d0d0d, #0a0a0a);

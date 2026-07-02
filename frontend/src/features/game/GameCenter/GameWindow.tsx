@@ -5,28 +5,93 @@ type Props = {
   world: any;
   gameEvents: any[];
   sendGame: (data: any) => void;
+  currentUserId?: number | null;
 };
 
-function getEventClass(type: string) {
-  switch (type) {
+function getEventClass(event: string) {
+  switch (event) {
     case "game_started":
       return "system";
     case "action_result":
       return "player";
     case "error":
       return "error";
+    case "system":
+      return "system";
+    case "unknown":
+      return "error";
     default:
       return "narration";
   }
+}
+
+function getEventLabel(event: string) {
+  switch (event) {
+    case "game_started":
+    case "system":
+      return "System";
+    case "action_result":
+      return "Ty";
+    case "error":
+    case "unknown":
+      return "Błąd";
+    default:
+      return "Mistrz Gry";
+  }
+}
+
+function renderText(text: any): string {
+  if (!text) return "";
+
+  if (typeof text === "string") {
+    try {
+      const parsed = JSON.parse(text);
+      if (typeof parsed === "object" && parsed !== null) {
+        return parsed.text || parsed.narration || parsed.description || parsed.message || text;
+      }
+    } catch {
+      // no-op
+    }
+    return text;
+  }
+
+  if (typeof text === "object" && text !== null) {
+    return text.text || text.narration || text.description || text.message || JSON.stringify(text);
+  }
+
+  return String(text);
 }
 
 export default function GameWindow({
   world,
   gameEvents,
   sendGame,
+  currentUserId = null,
 }: Props) {
   const [input, setInput] = useState("");
   const logEndRef = useRef<HTMLDivElement | null>(null);
+
+  const lastEvent = gameEvents[gameEvents.length - 1];
+  const lastChoices = lastEvent?.payload?.choices || [];
+  const turnState = lastEvent?.payload?.turn_state || lastEvent?.turn_state || {};
+  const isMyTurn = currentUserId == null || turnState.current_player_id == null || turnState.current_player_id === currentUserId;
+  const fallbackChoices = [
+    {
+      id: "inspect",
+      label: "Rozejrzyj się",
+      title: "Rozejrzyj się",
+      message: "sprawdź otoczenie",
+      action: "inspect",
+    },
+    {
+      id: "move",
+      label: "Idź dalej",
+      title: "Idź dalej",
+      message: "idź dalej",
+      action: "move",
+    },
+  ];
+  const visibleChoices = lastChoices.length > 0 ? lastChoices : fallbackChoices;
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -43,6 +108,16 @@ export default function GameWindow({
     setInput("");
   };
 
+  const handleChoice = (choice: any) => {
+    const message = choice?.message || choice?.label || choice?.title || "";
+    if (!message) return;
+
+    sendGame({
+      type: "player_action",
+      message,
+    });
+  };
+
   return (
     <div className="gameWindow">
       <div className="header">
@@ -52,22 +127,61 @@ export default function GameWindow({
         </div>
       </div>
 
-      {world && (
+      {world ? (
         <div className="world">
-          <h2>{world.name || world.title || world.intro || "World"}</h2>
+          <h2>{world.name || world.title || "World"}</h2>
           <p>{world.description || world.lore?.situation || world.situation || world.intro || ""}</p>
+        </div>
+      ) : (
+        <div className="world">
+          <h2>🕯️ Przygotowanie przygody</h2>
+          <p>Witaj w pokoju. Host rozpocznie przygodę, a Mistrz Gry od razu wypełni świat narracją.</p>
         </div>
       )}
 
       <div className="log">
-        {gameEvents.map((e, i) => (
-          <div key={i} className={`log-line ${getEventClass(e.type)}`}>
-            {e.text}
+        {gameEvents.length === 0 && (
+          <div className="log-line system">
+            Czekasz na rozpoczęcie przygody. Naciśnij Start gry i wpisz pierwszą akcję.
           </div>
-        ))}
+        )}
+
+        {gameEvents.map((e, i) => {
+          const eventType = e.event || e.type || "narration";
+          const eventClass = getEventClass(eventType);
+          const label = getEventLabel(eventType);
+
+          return (
+            <div key={i} className={`log-line ${eventClass}`}>
+              <div className="bubble">
+                <div className="bubble-label">{label}</div>
+                <div className="bubble-text">{renderText(e.text || e.payload?.text || "")}</div>
+              </div>
+            </div>
+          );
+        })}
 
         <div ref={logEndRef} />
       </div>
+
+      <div className="turnHint">
+        {isMyTurn ? "Twoja tura — wybierz akcję." : "Czekasz na swoją turę."}
+      </div>
+
+      {visibleChoices.length > 0 && (
+        <div className="choiceBar">
+          {visibleChoices.map((choice: any, index: number) => (
+            <button
+              key={choice.id || `${choice.label}-${index}`}
+              className="choiceButton"
+              onClick={() => isMyTurn && handleChoice(choice)}
+              disabled={!isMyTurn}
+            >
+              {choice.label || choice.title || choice.message || "Dalej"}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="inputBar">
         <input

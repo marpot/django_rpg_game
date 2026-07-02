@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from asgiref.sync import sync_to_async
 
@@ -7,10 +8,65 @@ from .base import BaseConsumer
 from chat.models import Room
 from game_instances.services.llm.orchestrator.llm_service import LLMService
 from game.core.action_processor import ActionProcessor
+from game.core.choice_service import AdventureChoiceService
 from world.seeders.world_seeder import WorldSeeder
 from game.core.events.memory_builder import GameMemoryBuilder
 
 logger = logging.getLogger(__name__)
+
+
+def safe_text(text: any) -> str:
+    """Radzi sobie z czystym JSON-em zwracanym przez LLM."""
+    if not text:
+        return "Nic się nie stało..."
+
+    if isinstance(text, (dict, list)):
+        text = json.dumps(text, ensure_ascii=False)
+
+    if not isinstance(text, str):
+        return str(text)
+
+    original_text = text.strip()
+    text = re.sub(r'```(?:json)?\s*|\s*```', '', original_text).strip()
+
+    if text.startswith(('{' , '[')) or ('"action"' in text or '"target"' in text or '"method"' in text):
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, dict):
+                for key in ["text", "narration", "description", "content", "story", "message", "response"]:
+                    if key in parsed and isinstance(parsed[key], str) and len(parsed[key].strip()) > 5:
+                        return parsed[key].strip()
+
+                action = parsed.get("action")
+                target = parsed.get("target")
+                method = parsed.get("method")
+
+                if action == "attack":
+                    if target:
+                        method_part = f" {method}" if method else ""
+                        return f"Atakujesz {target}{method_part}."
+                    return "Wykonujesz atak."
+                if action == "move":
+                    target_name = target or "nowego miejsca"
+                    return f"Przemieszczasz się do {target_name}."
+                if action in {"inspect", "look"}:
+                    return "Rozglądasz się uważnie po okolicy."
+                return original_text
+        except (json.JSONDecodeError, TypeError, KeyError):
+            pass
+
+    try:
+        match = re.search(r'(\{[\s\S]*?\})', original_text)
+        if match:
+            parsed = json.loads(match.group(1))
+            if isinstance(parsed, dict):
+                for key in ["text", "narration", "description"]:
+                    if key in parsed and isinstance(parsed[key], str) and len(parsed[key]) > 5:
+                        return parsed[key].strip()
+    except Exception:
+        pass
+
+    return original_text
 
 
 class GameConsumer(BaseConsumer):
@@ -20,6 +76,7 @@ class GameConsumer(BaseConsumer):
         self._game_started_sent = False
         self._world_sent = False
         self.world = None  # 🔥 ważne
+        self.choice_service = AdventureChoiceService()
 
     async def on_connect(self):
         logger.info("=== GAME CONSUMER WS CONNECTED===")
@@ -83,14 +140,21 @@ class GameConsumer(BaseConsumer):
             parsed["world"] = self.world  # 🔥 kluczowa zmiana
 
             result = await sync_to_async(self.processor.process)(parsed)
+            cleaned_text = safe_text(result.get("text", ""))
+
+            turn_state = result.get("turn_state", {}) or {}
+            payload = {
+                "data": result,
+                "user": self.scope["user"].username,
+                "text": cleaned_text,
+                "turn_state": turn_state,
+                "choices": result.get("choices", []),
+            }
 
             await self._send_game_event(
                 "action_result",
-                {
-                    "data": result,
-                    "user": self.scope["user"].username,
-                },
-                text=result.get("text", "")
+                payload,
+                text=cleaned_text
             )
 
         except Exception as e:
@@ -151,6 +215,14 @@ class GameConsumer(BaseConsumer):
             "seed": world_raw.get("seed", {}),
         }
 
+        choices = await sync_to_async(self.choice_service.build_choices)(
+            adventure_id=adventure_id,
+            room_key=self.room_name,
+            event_type="game_started",
+            result={"intro": self.world.get("intro", "")},
+            world=self.world,
+        )
+
         logger.info(f"[GAME_CONSUMER] world generated: {self.world}")
 
         if self._world_sent:
@@ -164,6 +236,7 @@ class GameConsumer(BaseConsumer):
                 "world": self.world,
                 "room_id": self.room_name,
                 "adventure_id": adventure_id,
+                "choices": choices,
             },
             text=self.world.get("intro", "A new world begins...")
         )
