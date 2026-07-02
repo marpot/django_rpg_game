@@ -39,14 +39,13 @@ class IntentParser:
 
         if has("attack", "atak", "walcz", "fight"):
             action = "attack"
-        elif has("talk", "porozmawiaj", "mów"):
+        elif has("talk", "porozmawiaj", "mów", "rozmawiaj"):
             action = "talk"
-        elif has("move", "go", "idź", "chodź"):
+        elif has("move", "go", "idź", "idz", "iść", "ido", "idę", "chodź", "chodzić", "pójdź", "wejdź"):
             action = "move"
-        elif has("inspect", "look", "sprawdź", "rozejrzyj"):
+        elif has("inspect", "look", "sprawdź", "sprawdz", "rozejrzyj", "rozglądaj"):
             action = "inspect"
 
-        # bezpieczeństwo
         if action not in self.ALLOWED_ACTIONS:
             return {
                 "action": "unknown",
@@ -54,9 +53,17 @@ class IntentParser:
                 "method": None,
             }
 
-        words = text.split()
-        if len(words) > 1:
-            target = words[-1]
+        if action == "move":
+            words = [w for w in text.replace("-", " ").split() if w]
+            if len(words) > 1:
+                target_tokens = [w for w in words[1:] if w not in {"do", "na", "do", "przez", "w", "na", "ku"}]
+                target = " ".join(target_tokens).strip()
+                if not target:
+                    target = words[-1]
+        else:
+            words = text.split()
+            if len(words) > 1:
+                target = words[-1]
 
         return {
             "action": action,
