@@ -8,6 +8,7 @@ from .base import BaseConsumer
 from chat.models import Room
 from game_instances.services.llm.orchestrator.llm_service import LLMService
 from game.core.action_processor import ActionProcessor
+from game.core.choice_service import AdventureChoiceService
 from world.seeders.world_seeder import WorldSeeder
 from game.core.events.memory_builder import GameMemoryBuilder
 
@@ -75,6 +76,7 @@ class GameConsumer(BaseConsumer):
         self._game_started_sent = False
         self._world_sent = False
         self.world = None  # 🔥 ważne
+        self.choice_service = AdventureChoiceService()
 
     async def on_connect(self):
         logger.info("=== GAME CONSUMER WS CONNECTED===")
@@ -208,6 +210,14 @@ class GameConsumer(BaseConsumer):
             "seed": world_raw.get("seed", {}),
         }
 
+        choices = await sync_to_async(self.choice_service.build_choices)(
+            adventure_id=adventure_id,
+            room_key=self.room_name,
+            event_type="game_started",
+            result={"intro": self.world.get("intro", "")},
+            world=self.world,
+        )
+
         logger.info(f"[GAME_CONSUMER] world generated: {self.world}")
 
         if self._world_sent:
@@ -221,6 +231,7 @@ class GameConsumer(BaseConsumer):
                 "world": self.world,
                 "room_id": self.room_name,
                 "adventure_id": adventure_id,
+                "choices": choices,
             },
             text=self.world.get("intro", "A new world begins...")
         )
