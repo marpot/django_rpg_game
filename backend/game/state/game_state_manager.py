@@ -25,6 +25,10 @@ class RoomState:
     players: dict[int, Player] = field(default_factory=dict)
     enemies: dict[str, Enemy] = field(default_factory=dict)
     npcs: dict[str, NPC] = field(default_factory=dict)
+    turn_order: list[int] = field(default_factory=list)
+    current_player_id: int | None = None
+    current_turn_index: int = 0
+    player_histories: dict[int, list[dict]] = field(default_factory=dict)
 
 
 class GameStateManager:

@@ -1,58 +1,57 @@
 /* Kontener czatu z efektem szkła */
 .box-chat-container {
-  max-width: 2000px;
   width: 100%;
-  margin: auto;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
   padding: 10px;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.2); /* Przezroczystość tła */
-  backdrop-filter: blur(10px); /* Rozmycie tła (efekt szkła) */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Lekki cień */
-  height: 70vh; /* Zmieniamy wysokość na 70% wysokości ekranu */
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Ukrycie nadmiarowego kontentu */
+  overflow: hidden;
   animation: FadeIn 0.5s ease-out;
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtelna obwódka */
-  background-color: rgba(255, 255, 255, 0.2); /* Białe tło z przezroczystością */
-  overflow-x: hidden; /* Ukryj pasek przewijania w poziomie */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow-x: hidden;
 }
 
 /* Kontener wiadomości */
 .chat-messages {
   flex: 1;
-  overflow-y: auto; /* Pozwala na przewijanie, jeśli wiadomości są długie */
-  padding: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
   max-width: 100%;
-  height: 100%; /* Zajmuje całą dostępną przestrzeń w obrębie kontenera czatu */
 }
 
 /* Styl dla każdej wiadomości */
 .notification {
   width: 100%;
-  max-width: 75%;
-  padding: 10px;
+  max-width: 78%;
+  padding: 8px 10px;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 13px;
   word-wrap: break-word;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Delikatny cień dla wiadomości */
-  overflow-wrap: break-word; 
+  margin-bottom: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-wrap: break-word;
 }
 
 /* Wiadomości wysłane przez użytkownika (po prawej) */
 .notification.right {
-  background-color: #28a745; /* Zielony kolor dla użytkownika */
+  background-color: #28a745;
   color: white;
   align-self: flex-end;
-  border-radius: 20px 20px 0 20px;
-  padding: 15px;
-  max-width: 70%;
-  font-size: 18px;
+  border-radius: 14px 14px 0 14px;
+  padding: 10px 12px;
+  max-width: 72%;
+  font-size: 13px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   animation: slideInRight 0.3s ease-out;
   word-wrap: break-word;
@@ -63,10 +62,10 @@
   background-color: #e5e5ea;
   color: #333;
   align-self: flex-start;
-  border-radius: 20px 20px 20px 0;
-  padding: 15px;
-  max-width: 70%;
-  font-size: 18px;
+  border-radius: 14px 14px 14px 0;
+  padding: 10px 12px;
+  max-width: 72%;
+  font-size: 13px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   animation: slideInLeft 0.3s ease-out;
   word-wrap: break-word;
@@ -104,16 +103,16 @@
 
 /* Formularz */
 .chat-form {
-  margin-top: 15px;
+  margin-top: 8px;
   width: 100%;
 }
 
 /* Input do wiadomości */
 .input {
-  border-radius: 20px;
-  padding: 10px;
-  font-size: 24px;
-  height: 59px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 13px;
+  height: 38px;
   resize: none;
   width: 100%;
 }

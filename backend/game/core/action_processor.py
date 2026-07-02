@@ -22,7 +22,7 @@ class ActionProcessor:
         self.runtime_player_service = RuntimePlayerService(state_manager)
         self.choice_service = AdventureChoiceService()
 
-    def _response(self, event_type: str, text: str, result=None, world=None, choices=None):
+    def _response(self, event_type: str, text: str, result=None, world=None, choices=None, turn_state=None):
         return {
             "action": event_type,
             "event_type": event_type,
@@ -30,6 +30,7 @@ class ActionProcessor:
             "result": result or {},
             "world": world or {},
             "choices": choices or [],
+            "turn_state": turn_state or {},
         }
 
     def _narrate(self, action: str, result: dict, world: dict | None = None):
@@ -39,6 +40,42 @@ class ActionProcessor:
             "result": result,
             "world": world or {}
         })
+
+    def _advance_turn(self, room_obj, user_id):
+        if not room_obj.turn_order:
+            room_obj.turn_order = [user_id]
+
+        if user_id not in room_obj.turn_order:
+            room_obj.turn_order.append(user_id)
+
+        if room_obj.current_player_id is None:
+            room_obj.current_player_id = room_obj.turn_order[0]
+            room_obj.current_turn_index = 0
+            return room_obj.current_player_id
+
+        current_index = room_obj.turn_order.index(room_obj.current_player_id)
+        next_index = (current_index + 1) % len(room_obj.turn_order)
+        room_obj.current_player_id = room_obj.turn_order[next_index]
+        room_obj.current_turn_index = next_index
+        return room_obj.current_player_id
+
+    def _record_history(self, room_obj, user_id, action, result):
+        if user_id not in room_obj.player_histories:
+            room_obj.player_histories[user_id] = []
+        room_obj.player_histories[user_id].append({
+            "action": action,
+            "result": result,
+            "timestamp": len(room_obj.player_histories[user_id]),
+        })
+
+    def _turn_state(self, room_obj, user_id):
+        return {
+            "current_player_id": room_obj.current_player_id,
+            "current_turn_index": room_obj.current_turn_index,
+            "turn_order": room_obj.turn_order,
+            "is_your_turn": room_obj.current_player_id == user_id,
+            "history": room_obj.player_histories.get(user_id, []),
+        }
 
     def process(self, parsed_input):
         logger.info(f"[ACTION PROCESS] input={parsed_input}")
@@ -56,14 +93,41 @@ class ActionProcessor:
                 {"error": "invalid_action"}
             )
 
+        room = parsed_input.get("room")
+        user_id = parsed_input.get("user_id")
+        room_obj = self.state_manager.get_or_create_room(self.state_manager.normalize_room_id(room))
+
+        if user_id is not None:
+            if user_id not in room_obj.turn_order:
+                room_obj.turn_order.append(user_id)
+            if room_obj.current_player_id is None:
+                room_obj.current_player_id = user_id
+                room_obj.current_turn_index = 0
+            room_obj.player_histories.setdefault(user_id, [])
+
         if action == "attack":
-            return self._handle_attack(parsed_input, world)
+            result = self._handle_attack(parsed_input, world)
+            if user_id is not None:
+                self._record_history(room_obj, user_id, action, result.get("result", {}))
+                self._advance_turn(room_obj, user_id)
+                result["turn_state"] = self._turn_state(room_obj, user_id)
+            return result
 
         if action == "inspect":
-            return self._handle_inspect(parsed_input, world)
+            result = self._handle_inspect(parsed_input, world)
+            if user_id is not None:
+                self._record_history(room_obj, user_id, action, result.get("result", {}))
+                self._advance_turn(room_obj, user_id)
+                result["turn_state"] = self._turn_state(room_obj, user_id)
+            return result
 
         if action == "move":
-            return self._handle_move(parsed_input, world)
+            result = self._handle_move(parsed_input, world)
+            if user_id is not None:
+                self._record_history(room_obj, user_id, action, result.get("result", {}))
+                self._advance_turn(room_obj, user_id)
+                result["turn_state"] = self._turn_state(room_obj, user_id)
+            return result
 
         if action == "look":
             return self._handle_inspect(parsed_input, world)

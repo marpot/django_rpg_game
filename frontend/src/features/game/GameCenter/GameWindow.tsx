@@ -5,6 +5,7 @@ type Props = {
   world: any;
   gameEvents: any[];
   sendGame: (data: any) => void;
+  currentUserId?: number | null;
 };
 
 function getEventClass(event: string) {
@@ -65,11 +66,15 @@ export default function GameWindow({
   world,
   gameEvents,
   sendGame,
+  currentUserId = null,
 }: Props) {
   const [input, setInput] = useState("");
   const logEndRef = useRef<HTMLDivElement | null>(null);
 
-  const lastChoices = gameEvents[gameEvents.length - 1]?.payload?.choices || [];
+  const lastEvent = gameEvents[gameEvents.length - 1];
+  const lastChoices = lastEvent?.payload?.choices || [];
+  const turnState = lastEvent?.payload?.turn_state || lastEvent?.turn_state || {};
+  const isMyTurn = currentUserId == null || turnState.current_player_id == null || turnState.current_player_id === currentUserId;
   const fallbackChoices = [
     {
       id: "inspect",
@@ -159,13 +164,18 @@ export default function GameWindow({
         <div ref={logEndRef} />
       </div>
 
+      <div className="turnHint">
+        {isMyTurn ? "Twoja tura — wybierz akcję." : "Czekasz na swoją turę."}
+      </div>
+
       {visibleChoices.length > 0 && (
         <div className="choiceBar">
           {visibleChoices.map((choice: any, index: number) => (
             <button
               key={choice.id || `${choice.label}-${index}`}
               className="choiceButton"
-              onClick={() => handleChoice(choice)}
+              onClick={() => isMyTurn && handleChoice(choice)}
+              disabled={!isMyTurn}
             >
               {choice.label || choice.title || choice.message || "Dalej"}
             </button>

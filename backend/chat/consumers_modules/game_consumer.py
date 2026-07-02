@@ -142,13 +142,18 @@ class GameConsumer(BaseConsumer):
             result = await sync_to_async(self.processor.process)(parsed)
             cleaned_text = safe_text(result.get("text", ""))
 
+            turn_state = result.get("turn_state", {}) or {}
+            payload = {
+                "data": result,
+                "user": self.scope["user"].username,
+                "text": cleaned_text,
+                "turn_state": turn_state,
+                "choices": result.get("choices", []),
+            }
+
             await self._send_game_event(
                 "action_result",
-                {
-                    "data": result,
-                    "user": self.scope["user"].username,
-                    "text": cleaned_text,
-                },
+                payload,
                 text=cleaned_text
             )
 
