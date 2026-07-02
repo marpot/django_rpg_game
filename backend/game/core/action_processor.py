@@ -8,11 +8,9 @@ from game.state.runtime.runtime_player_service import RuntimePlayerService
 from game_instances.services.llm.orchestrator.llm_service import LLMService
 from game.npc.npc_service import NPCService
 
-from game.state.runtime.models import Enemy as RuntimeEnemy
-from world.models import Enemy as EnemyORM
-
-from game.core.action_attack import AttackAction
-from game.core.action_move import MoveAction
+from game.core.actions.action_attack import AttackAction
+from game.core.actions.action_move import MoveAction
+from game.core.actions.action_inspect import InspectAction
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +20,7 @@ class ActionProcessor:
         self.state_manager = state_manager
         self.combat_service = combat_service or CombatService(DiceService())
         self.resolver = resolver or EntityResolver(state_manager)
+
         self.runtime_player_service = RuntimePlayerService(state_manager)
         self.choice_service = AdventureChoiceService()
 
@@ -38,6 +37,14 @@ class ActionProcessor:
         self.move_action = MoveAction(
             state_manager=self.state_manager,
             resolver=self.resolver,
+            runtime_player_service=self.runtime_player_service,
+            choice_service=self.choice_service,
+            narrate_fn=self._narrate,
+            response_fn=self._response,
+        )
+
+        self.inspect_action = InspectAction(
+            state_manager=self.state_manager,
             runtime_player_service=self.runtime_player_service,
             choice_service=self.choice_service,
             narrate_fn=self._narrate,
@@ -77,13 +84,16 @@ class ActionProcessor:
 
         current_index = room_obj.turn_order.index(room_obj.current_player_id)
         next_index = (current_index + 1) % len(room_obj.turn_order)
+
         room_obj.current_player_id = room_obj.turn_order[next_index]
         room_obj.current_turn_index = next_index
+
         return room_obj.current_player_id
 
     def _record_history(self, room_obj, user_id, action, result):
         if user_id not in room_obj.player_histories:
             room_obj.player_histories[user_id] = []
+
         room_obj.player_histories[user_id].append({
             "action": action,
             "result": result,
@@ -106,7 +116,7 @@ class ActionProcessor:
         world = parsed_input.get("world")
 
         if parsed_input.get("error") == "unknown_intent_fallback":
-            return self._handle_inspect(parsed_input)
+            return self._handle_inspect(parsed_input, world)
 
         if not action or action == "unknown":
             return self._response(
@@ -117,6 +127,7 @@ class ActionProcessor:
 
         room = parsed_input.get("room")
         user_id = parsed_input.get("user_id")
+
         room_obj = self.state_manager.get_or_create_room(
             self.state_manager.normalize_room_id(room)
         )
@@ -132,76 +143,33 @@ class ActionProcessor:
         if action == "attack":
             result = self.attack_action.handle(parsed_input, world)
 
-            if user_id is not None:
-                self._record_history(room_obj, user_id, action, result.get("result", {}))
-                self._advance_turn(room_obj, user_id)
-                result["turn_state"] = self._turn_state(room_obj, user_id)
+        elif action == "inspect":
+            result = self.inspect_action.handle(parsed_input, world)
 
-            return result
-
-        if action == "inspect":
-            result = self._handle_inspect(parsed_input, world)
-
-            if user_id is not None:
-                self._record_history(room_obj, user_id, action, result.get("result", {}))
-                self._advance_turn(room_obj, user_id)
-                result["turn_state"] = self._turn_state(room_obj, user_id)
-
-            return result
-
-        if action == "move":
+        elif action == "move":
             result = self.move_action.handle(parsed_input, world)
 
-            if user_id is not None:
-                self._record_history(room_obj, user_id, action, result.get("result", {}))
-                self._advance_turn(room_obj, user_id)
-                result["turn_state"] = self._turn_state(room_obj, user_id)
-
-            return result
-
-        if action == "look":
+        elif action == "look":
             return self._handle_inspect(parsed_input, world)
 
-        if action == "talk":
+        elif action == "talk":
             result = NPCService(self.state_manager).talk(
                 parsed_input["room"],
                 parsed_input["target"]
             )
             return self._response("talk", result.get("text", ""), result)
 
-        return self._response(action, "Unhandled action", {"error": "unhandled_action"})
+        else:
+            return self._response(action, "Unhandled action", {"error": "unhandled_action"})
 
+        # wspólna część (turn + history)
+        if user_id is not None:
+            self._record_history(room_obj, user_id, action, result.get("result", {}))
+            self._advance_turn(room_obj, user_id)
+            result["turn_state"] = self._turn_state(room_obj, user_id)
 
-    # -------------------------
-    # INSPECT
-    # -------------------------
+        return result
+
     def _handle_inspect(self, parsed_input, world=None):
-        room = parsed_input.get("room")
-        user_id = parsed_input.get("user_id")
-
-        room_key = self.state_manager.normalize_room_id(room)
-        room_obj = self.state_manager.get_or_create_room(room_key)
-
-        self.runtime_player_service.get_or_create(room_obj, user_id)
-        enemies = list(room_obj.enemies.keys())
-
-        narration = self._narrate("inspect", {
-            "room": room_key,
-            "enemies": enemies
-        }, world)
-
-        choices = self.choice_service.build_choices(
-            adventure_id=parsed_input.get("adventure"),
-            room_key=room_key,
-            event_type="inspect",
-            result={"room": room_key, "enemies": enemies},
-            world=world,
-        )
-
-        return self._response(
-            "inspect",
-            narration.get("text", "Rozglądasz się po okolicy"),
-            {"room": room_key, "enemies": enemies},
-            world,
-            choices,
-        )
+        # fallback legacy (można później usunąć)
+        return self.inspect_action.handle(parsed_input, world)
